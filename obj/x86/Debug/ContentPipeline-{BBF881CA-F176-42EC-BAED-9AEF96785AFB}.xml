@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<XnaContent xmlns:Pipeline="Microsoft.Xna.Framework.Content.Pipeline">
+  <Asset Type="Pipeline:BuildItemCollection">
+    <Item>
+      <Source>gebji1.png</Source>
+      <Name>genji1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\genji1.xnb</Output>
+      <Time>2018-02-23T12:18:03.0989766-05:00</Time>
+    </Item>
+    <Item>
+      <Source>genji1dead.png</Source>
+      <Name>genji1dead</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\genji1dead.xnb</Output>
+      <Time>2018-02-26T12:58:29.332212-05:00</Time>
+    </Item>
+    <Item>
+      <Source>SpriteFont_sml.spritefont</Source>
+      <Name>SpriteFont_sml</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\SpriteFont_sml.xnb</Output>
+      <Time>2018-02-23T17:10:55.0076591-05:00</Time>
+    </Item>
+    <Item>
+      <Source>genji1deaddead.png</Source>
+      <Name>genji1deaddead</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\genji1deaddead.xnb</Output>
+      <Time>2018-02-26T12:57:04.4765282-05:00</Time>
+    </Item>
+    <Item>
+      <Source>swordD.png</Source>
+      <Name>swordD</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\swordD.xnb</Output>
+      <Time>2018-02-26T13:03:11.9625463-05:00</Time>
+    </Item>
+    <Item>
+      <Source>swordL.png</Source>
+      <Name>swordL</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\swordL.xnb</Output>
+      <Time>2018-02-26T13:03:11.9675502-05:00</Time>
+    </Item>
+    <Item>
+      <Source>swordR.png</Source>
+      <Name>swordR</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\swordR.xnb</Output>
+      <Time>2018-02-26T13:03:11.9705519-05:00</Time>
+    </Item>
+    <Item>
+      <Source>swordU.png</Source>
+      <Name>swordU</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\swordU.xnb</Output>
+      <Time>2018-02-26T13:03:11.9735601-05:00</Time>
+    </Item>
+    <Item>
+      <Source>onArrow.png</Source>
+      <Name>onArrowU</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowU.xnb</Output>
+      <Time>2018-02-26T15:03:56.3482708-05:00</Time>
+    </Item>
+    <Item>
+      <Source>offArrow.png</Source>
+      <Name>offArrowU</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowU.xnb</Output>
+      <Time>2018-02-26T15:00:58.5685799-05:00</Time>
+    </Item>
+    <Item>
+      <Source>offArrowD.png</Source>
+      <Name>offArrowD</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowD.xnb</Output>
+      <Time>2018-02-26T15:00:59.7404401-05:00</Time>
+    </Item>
+    <Item>
+      <Source>offArrowL.png</Source>
+      <Name>offArrowL</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowL.xnb</Output>
+      <Time>2018-02-26T14:57:47.0197048-05:00</Time>
+    </Item>
+    <Item>
+      <Source>onArrowD.png</Source>
+      <Name>onArrowD</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowD.xnb</Output>
+      <Time>2018-02-26T15:04:22.9508307-05:00</Time>
+    </Item>
+    <Item>
+      <Source>onArrowL.png</Source>
+      <Name>onArrowL</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowL.xnb</Output>
+      <Time>2018-02-26T15:04:48.6168339-05:00</Time>
+    </Item>
+    <Item>
+      <Source>offArrowR.png</Source>
+      <Name>offArrowR</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowR.xnb</Output>
+      <Time>2018-02-26T15:03:08.1939611-05:00</Time>
+    </Item>
+    <Item>
+      <Source>onArrowR.png</Source>
+      <Name>onArrowR</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowR.xnb</Output>
+      <Time>2018-02-26T15:05:16.1001821-05:00</Time>
+    </Item>
+    <BuildSuccessful>true</BuildSuccessful>
+    <Settings>
+      <ContentProjectGUID>{BBF881CA-F176-42EC-BAED-9AEF96785AFB}</ContentProjectGUID>
+      <TargetPlatform>Windows</TargetPlatform>
+      <TargetProfile>Reach</TargetProfile>
+      <BuildConfiguration>Debug</BuildConfiguration>
+      <CompressContent>false</CompressContent>
+      <RootDirectory>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1Content\</RootDirectory>
+      <LoggerRootDirectory>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\</LoggerRootDirectory>
+      <IntermediateDirectory>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\obj\x86\Debug\</IntermediateDirectory>
+      <OutputDirectory>c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\</OutputDirectory>
+    </Settings>
+    <Assemblies>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.XImporter.dll</Key>
+        <Value>2011-09-01T17:22:30-04:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.VideoImporters.dll</Key>
+        <Value>2011-09-01T17:22:30-04:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.TextureImporter.dll</Key>
+        <Value>2011-09-01T17:22:30-04:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.FBXImporter.dll</Key>
+        <Value>2011-09-01T17:22:30-04:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.EffectImporter.dll</Key>
+        <Value>2011-09-01T17:22:30-04:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\Program Files (x86)\Microsoft XNA\XNA Game Studio\v4.0\References\Windows\x86\Microsoft.Xna.Framework.Content.Pipeline.AudioImporters.dll</Key>
+        <Value>2011-09-01T17:22:30-04:00</Value>
+      </Assembly>
+      <Assembly>
+        <Key>C:\WINDOWS\Microsoft.Net\assembly\GAC_32\Microsoft.Xna.Framework.Content.Pipeline\v4.0_4.0.0.0__842cf8be1de50553\Microsoft.Xna.Framework.Content.Pipeline.dll</Key>
+        <Value>2018-02-22T16:09:28.9097511-05:00</Value>
+      </Assembly>
+    </Assemblies>
+  </Asset>
+</XnaContent>
