@@ -1,0 +1,2 @@
+c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1Content\obj\x86\Debug\WindowsGame1Content.contentprojResolveAssemblyReference.cache
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1Content\obj\x86\Debug\WindowsGame1Content.contentprojResolveAssemblyReference.cache

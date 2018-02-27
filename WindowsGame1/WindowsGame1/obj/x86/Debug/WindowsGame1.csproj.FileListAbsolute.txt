@@ -30,3 +30,35 @@ c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\
 c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowL.xnb
 c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowR.xnb
 c:\users\yackob\documents\visual studio 2015\Projects\WindowsGame1\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowR.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\genji1.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\genji1dead.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowU.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowU.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\genji1deaddead.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\swordD.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\swordL.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\swordR.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\swordU.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowD.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowL.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowD.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowL.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowR.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowR.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\SpriteFont_sml.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\WindowsGame1.exe
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\WindowsGame1.pdb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Microsoft.Xna.Framework.dll
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Microsoft.Xna.Framework.Game.dll
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Microsoft.Xna.Framework.GamerServices.dll
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Microsoft.Xna.Framework.Graphics.dll
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Microsoft.Xna.Framework.Input.Touch.dll
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Microsoft.Xna.Framework.xml
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Microsoft.Xna.Framework.Game.xml
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Microsoft.Xna.Framework.Graphics.xml
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Microsoft.Xna.Framework.GamerServices.xml
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Microsoft.Xna.Framework.Input.Touch.xml
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\obj\x86\Debug\WindowsGame1.csprojResolveAssemblyReference.cache
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\obj\x86\Debug\WindowsGame1.exe
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\obj\x86\Debug\WindowsGame1.pdb
