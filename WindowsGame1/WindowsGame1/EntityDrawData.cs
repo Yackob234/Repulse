@@ -425,11 +425,10 @@ New Attacker: {7}
 Attack Delay Timer: {8}
 Changed Attacker Ran: {9} times
 AttackTimerLimit:{11}
-GenjiPosition: {12}
-_currentController: {13}
+_currentController: {12}
 ";
                 spriteBatch.DrawString(font, String.Format(debugInfo, fps, _p1.attacker, attackDirection, blockDirection, timer, _p1.health, 
-                    _p2.health, newAttacker, attackDelayTimer, ChangedAttackerRan, _p2.attacker, attackTimerLimit, genji1Position, _currentController
+                    _p2.health, newAttacker, attackDelayTimer, ChangedAttackerRan, _p2.attacker, attackTimerLimit, _currentController
                     ), new Vector2(5.0f, 0.0f), Color.White);
             }
 

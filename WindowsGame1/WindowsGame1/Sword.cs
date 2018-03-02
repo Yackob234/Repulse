@@ -86,6 +86,7 @@ namespace repulse
         public void swordMovement(DirectionEnum dir, GameTime gameTime)
         {
             _position += _speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            
         }
     }
 }
