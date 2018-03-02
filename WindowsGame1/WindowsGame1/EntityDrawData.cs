@@ -55,9 +55,7 @@ namespace repulse
 
 
         // Set the coordinates to draw the sprite at.
-        public Vector2 genji1Position = new Vector2(400.0f, 200.0f);
         // Store some information about the sprite's motion.
-        //int JumpDelay = 50;
         private GraphicsDevice graphicsDevice;
         private ContentManager contentManager;
         private SpriteFont font;
@@ -99,8 +97,9 @@ namespace repulse
             _downSword = new Sword(this, "swordD", );
             _leftSword = new Sword(this, "swordL", );
             */
-            _p1 = new Player(this, "genji1", "genji1Dead", "genji1deaddead", 2, false, genji1Position);
-            _p2 = new Player(this, "genji1", "genji1Dead", "genji1deaddead", 2, true, genji1Position);
+           
+            _p1 = new Player(this, "genji1", "genji1Dead", "genji1deaddead", 2, false);
+            _p2 = new Player(this, "genji1", "genji1Dead", "genji1deaddead", 2, true);
             Controller p1controller = new KeyboardController(KeyboardController.KeyboardStyleEnum.WSAD);
             Controller p2controller = new KeyboardController(KeyboardController.KeyboardStyleEnum.IJKL);
             _controllers.Add(p1controller);
@@ -337,18 +336,18 @@ namespace repulse
                 pressedExtention = false;
                 attackTimer = 0;
                 attackCast = false;
-                attackTimerLimit += -2;
+                attackTimerLimit += -3;
                 if (attackDirection != DirectionEnum.Blank)
                 {
                     _swords[attackDirection].resetSwordPosition(attackDirection);
                     _swords[attackDirection].resetSwordSpeed(attackDirection, attackTimerLimit);
                 }
-
+                
                 damage();
             }
             if (attackCast == true)
             {
-                _swords[attackDirection].swordMovement(attackDirection, gameTime);
+                _swords[attackDirection].swordMovement(gameTime);
             }
 
         }

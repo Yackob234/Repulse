@@ -17,7 +17,7 @@ namespace repulse
         private Vector2 _normalPosition;
         private Vector2 _adjustedPosition;
         
-        public Player(EntityDrawData drawData, string assetName, string assetNameHurt, string assetNameDead, int Health, bool Attacker, Vector2 position)
+        public Player(EntityDrawData drawData, string assetName, string assetNameHurt, string assetNameDead, int Health, bool Attacker)
             : base(drawData, assetName)
         {
             health = Health;
@@ -25,8 +25,8 @@ namespace repulse
             _assetName = assetName;
             _assetNameHurt = assetNameHurt;
             _assetNameDead = assetNameDead;
-            _normalPosition = position;
-            _position = position;
+            _normalPosition = Position();
+            _position = Position();
         }
 
         public override void Update(GameTime gameTime)
@@ -48,6 +48,13 @@ namespace repulse
 
             _position = _adjustedPosition;
             base.Update(gameTime);
+        }
+
+        public Vector2 Position()
+        {
+            Vector2 pos;
+            pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 - _texture.Width / 2, _drawData.GraphicsDevice.Viewport.Height / 2 - _texture.Height / 2);
+            return pos;
         }
 
        
