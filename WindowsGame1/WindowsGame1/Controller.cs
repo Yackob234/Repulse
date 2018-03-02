@@ -12,6 +12,9 @@ namespace repulse
         public delegate void ControllerDirectionEvent(Controller controller, DirectionEnum dir, bool pressed);
         public event ControllerDirectionEvent Direction;
 
+        public delegate void ControllerCharacterEvent(Controller controller, CharacterEnum cha, bool pressed);
+        public event ControllerCharacterEvent Character;
+
         public virtual void Update(GameTime gameTime)
         {
 
@@ -23,5 +26,9 @@ namespace repulse
         {
             Direction?.Invoke(this, dir, pressed);
         }    
+        protected void DoCharacter(CharacterEnum cha, bool pressed)
+        {
+            Character?.Invoke(this, cha, pressed);
+        }
     }
 }

@@ -28,10 +28,10 @@ namespace repulse
         public Vector2[] swordSpeed = new Vector2[4];
         */
         //int[] array = new int[] { 1, 2, 3 };
-        SortedList<string, Texture2D> textures;
+
+            //the rest of variables
         public DirectionEnum attackDirection = DirectionEnum.Blank;
         public DirectionEnum blockDirection = DirectionEnum.Blank;
-        
         public int timer = 0;
         public int timerLimit = 500;
         public int attackTimer = 0;
@@ -42,20 +42,17 @@ namespace repulse
         public bool newAttacker = true;
         public bool attackCast = false;
         public bool pressedExtention= false;
+        public string[] alive = new string[2];
+        public string[] Dead = new string[2];
+        public string[] deaddead = new string[2];
 
         //debugging variables:
         public int debug = -1;
         public int ChangedAttackerRan = 0;
         public int debugDelay = 0;
         public int debugDelayLimit = 25;
-        
-        
 
-        //public Vector2 genji1Position;
-
-
-        // Set the coordinates to draw the sprite at.
-        // Store some information about the sprite's motion.
+        //private variables
         private GraphicsDevice graphicsDevice;
         private ContentManager contentManager;
         private SpriteFont font;
@@ -67,14 +64,14 @@ namespace repulse
         private Player _p2;
         private int _victor = 0;
 
-
+        //lists
         private List<Controller> _controllers = new List<Controller>();
         private List<Entity> _entities = new List<Entity>();
         private Dictionary<DirectionEnum, Arrow> _arrows = new Dictionary<DirectionEnum, Arrow>();
         private Dictionary<DirectionEnum, Sword> _swords = new Dictionary<DirectionEnum, Sword>();
+        SortedList<string, Texture2D> textures;
 
         private int _currentController = 2;
-        //private bool _allowAttack = true;
         
         public EntityDrawData(GraphicsDevice graphicsDevice, ContentManager contentManager)
         {
@@ -83,34 +80,24 @@ namespace repulse
             textures = new SortedList<string, Texture2D>();
             fonts = new SortedList<string, SpriteFont>();
             font = LoadFont("SpriteFont_sml");
-           //genji[2] = LoadTexture("genji1"); 
-            //genji[1] = LoadTexture("genji1Dead");
-            //genji[0] = LoadTexture("genji1deaddead");
-            /*
-            sword[0] = LoadTexture("swordU");
-            sword[1] = LoadTexture("swordR");
-            sword[2] = LoadTexture("swordD");
-            sword[3] = LoadTexture("swordL");
             
-            _upSword = new Sword(this, "swordU", );
-            _rightSword = new Sword(this, "swordR", );
-            _downSword = new Sword(this, "swordD", );
-            _leftSword = new Sword(this, "swordL", );
-            */
-           
-            _p1 = new Player(this, "genji1", "genji1Dead", "genji1deaddead", 2, false);
-            _p2 = new Player(this, "genji1", "genji1Dead", "genji1deaddead", 2, true);
             Controller p1controller = new KeyboardController(KeyboardController.KeyboardStyleEnum.WSAD);
             Controller p2controller = new KeyboardController(KeyboardController.KeyboardStyleEnum.IJKL);
             _controllers.Add(p1controller);
             _controllers.Add(p2controller);
 
+            p1controller.Direction += Controller_Direction;
+            p2controller.Direction += Controller_Direction;
+            precharacter();
+            p1controller.Character += Controller_Character;
+            p2controller.Character += Controller_Character;
+
+            _p1 = new Player(this, alive[0], Dead[0], deaddead[0], 2, false);
+            _p2 = new Player(this, alive[1], Dead[1], deaddead[1], 2, true);
+
             _entities.Add(_p1);
             _entities.Add(_p2);
 
-            p1controller.Direction += Controller_Direction;
-            p2controller.Direction += Controller_Direction;
-           
             AddArrow(DirectionEnum.Up);
             AddArrow(DirectionEnum.Down);
             AddArrow(DirectionEnum.Left);
@@ -129,11 +116,6 @@ namespace repulse
             _swords[DirectionEnum.Left].resetSwordSpeed(DirectionEnum.Left, attackTimerLimit);
             _swords[DirectionEnum.Down].resetSwordSpeed(DirectionEnum.Down, attackTimerLimit);
             _swords[DirectionEnum.Right].resetSwordSpeed(DirectionEnum.Right, attackTimerLimit);
-            //genjis.Add(LoadTexture("genji1deaddead"));
-            //genjis.Add(LoadTexture("genji1Dead"));
-            //genjis.Add(LoadTexture("genji1"));
-
-
         }
 
         private void Controller_Direction(Controller controller, DirectionEnum dir, bool pressed)
@@ -156,6 +138,72 @@ namespace repulse
                 // defender
                 //Console.WriteLine("defender");
                 blockDirection = dir;
+            }
+        }
+        public void precharacter()
+        {
+            for (int chosenCharacter = 0; chosenCharacter < 2; chosenCharacter++)
+            {
+                alive[chosenCharacter] = "mercy";
+                Dead[chosenCharacter] = "mercyDead";
+                deaddead[chosenCharacter] = "mercydeaddead";
+            }
+
+        }
+
+
+
+        private void Controller_Character(Controller controller, CharacterEnum cha, bool pressed)
+        {
+            //if you cannot attack return
+
+            for(int chosenCharacter = 0; chosenCharacter < 2; chosenCharacter++)
+            {
+                alive[chosenCharacter] = "mercy";
+                Dead[chosenCharacter] = "mercyDead";
+                deaddead[chosenCharacter] = "mercydeaddead";
+                switch (cha)
+                {
+                    case CharacterEnum.CuteGenji:
+                        alive[chosenCharacter] = "genji1";
+                        Dead[chosenCharacter] = "genji1Dead";
+                        deaddead[chosenCharacter] = "genji1deaddead";
+                        break;
+                    case CharacterEnum.EvilGenji:
+                        alive[chosenCharacter] = "genji2";
+                        Dead[chosenCharacter] = "genji2Dead";
+                        deaddead[chosenCharacter] = "genji2deaddead";
+                        break;
+                    case CharacterEnum.PixelGenji:
+                        alive[chosenCharacter] = "genji3";
+                        Dead[chosenCharacter] = "genji3Dead";
+                        deaddead[chosenCharacter] = "genji3deaddead";
+                        break;
+                    case CharacterEnum.Reinhardt:
+                        alive[chosenCharacter] = "reinhardt";
+                        Dead[chosenCharacter] = "reinhardtDead";
+                        deaddead[chosenCharacter] = "reinhardtdeaddead";
+                        break;
+                    case CharacterEnum.Torbjorn:
+                        alive[chosenCharacter] = "torbjorn";
+                        Dead[chosenCharacter] = "torbjornDead";
+                        deaddead[chosenCharacter] = "torbjorndeaddead";
+                        break;
+                    case CharacterEnum.Mercy:
+                        alive[chosenCharacter] = "mercy";
+                        Dead[chosenCharacter] = "mercyDead";
+                        deaddead[chosenCharacter] = "mercydeaddead";
+                        break;
+                    default:
+                        alive[chosenCharacter] = "mercy";
+                        Dead[chosenCharacter] = "mercyDead";
+                        deaddead[chosenCharacter] = "mercydeaddead";
+                        break;
+                }
+
+
+                Console.WriteLine(alive[chosenCharacter]);
+                
             }
         }
 
@@ -205,14 +253,14 @@ namespace repulse
         {
             //adds swords to a list, and gets the right sprites
             string _Texture;
-
+            //swordR works for both down and Right, down was thus deleted to save space
             switch (dir)
             {
                 case DirectionEnum.Up:
                     _Texture = "swordU";
                     break;
                 case DirectionEnum.Down:
-                    _Texture = "swordD";
+                    _Texture = "swordR";
                     break;
                 case DirectionEnum.Left:
                     _Texture = "swordL";

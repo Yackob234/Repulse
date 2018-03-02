@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arrow.cs" />
+    <Compile Include="CharacterEnum.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="ControllerEntity.cs" />
     <Compile Include="DirectionEnum.cs" />
