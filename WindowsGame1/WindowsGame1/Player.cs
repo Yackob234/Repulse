@@ -7,18 +7,49 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace repulse
 {
-    class Player
+    public class Player : Entity
     {
         public int health;
-        public Texture2D image;
-        public Texture2D imageHurt;
         public bool attacker;
-        public Player(int Health, bool Attacker)
+        private string _assetName;
+        private string _assetNameHurt;
+        private string _assetNameDead;
+        private Vector2 _normalPosition;
+        private Vector2 _adjustedPosition;
+        
+        public Player(EntityDrawData drawData, string assetName, string assetNameHurt, string assetNameDead, int Health, bool Attacker, Vector2 position)
+            : base(drawData, assetName)
         {
             health = Health;
             attacker = Attacker;
-            //image = Image;
-            //imageHurt = ImageHurt;
+            _assetName = assetName;
+            _assetNameHurt = assetNameHurt;
+            _assetNameDead = assetNameDead;
+            _normalPosition = position;
+            _position = position;
         }
+
+        public override void Update(GameTime gameTime)
+        {
+            
+            if (attacker == false)
+            {
+                if (health == 2) _texture = _drawData.LoadTexture(_assetName);
+                else if (health == 1) _texture = _drawData.LoadTexture(_assetNameHurt);
+                else if (health <= 0) _texture = _drawData.LoadTexture(_assetNameDead);
+
+                _adjustedPosition = _normalPosition;
+            }
+            else
+            {
+                _adjustedPosition = new Vector2(1000, 1000);
+                
+            }
+
+            _position = _adjustedPosition;
+            base.Update(gameTime);
+        }
+
+       
     }
 }

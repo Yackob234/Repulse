@@ -91,35 +91,6 @@ namespace repulse
            // int MaxY = graphics.GraphicsDevice.Viewport.Height -genji1.Height;
            // int MinY = 0;
             
-            if (newState.IsKeyDown(Keys.L))
-            {
-                drawData.p2Right();
-            } else if (newState.IsKeyDown(Keys.K))
-            {
-                drawData.p2Down();
-            } else if (newState.IsKeyDown(Keys.J))
-            {
-                drawData.p2Left();
-            } else if (newState.IsKeyDown(Keys.I))
-            {
-                drawData.p2Up();
-            }
-            if (newState.IsKeyDown(Keys.D))
-            {
-                drawData.p1Right();
-            }
-            else if (newState.IsKeyDown(Keys.S))
-            {
-                drawData.p1Down();
-            }
-            else if (newState.IsKeyDown(Keys.A))
-            {
-                drawData.p1Left();
-            }
-            else if (newState.IsKeyDown(Keys.W))
-            {
-                drawData.p1Up();
-            }
             if (newState.IsKeyDown(Keys.OemTilde))
             {
                 drawData.startDebug();
@@ -137,7 +108,7 @@ namespace repulse
             graphics.GraphicsDevice.Clear(Color.DarkKhaki);
 
             // Draw the sprite.
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
             //spriteBatch.Draw(genji1, genji1Position, Color.White);
             drawData.Draw(gameTime, spriteBatch);
             spriteBatch.End();
