@@ -236,15 +236,6 @@
       <Time>2018-03-02T16:07:52.1447484-05:00</Time>
     </Item>
     <Item>
-      <Source>reinhardtdeadead.png</Source>
-      <Name>reinhardtdeadead</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\reinhardtdeadead.xnb</Output>
-      <Time>2018-03-02T16:07:16.1788576-05:00</Time>
-    </Item>
-    <Item>
       <Source>torbjorn.jpg</Source>
       <Name>torbjorn</Name>
       <Importer>TextureImporter</Importer>
@@ -279,6 +270,114 @@
       <Options>None</Options>
       <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\selected.xnb</Output>
       <Time>2018-03-06T14:15:47.7666152-05:00</Time>
+    </Item>
+    <Item>
+      <Source>mercystaffL.png</Source>
+      <Name>mercystaffL</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\mercystaffL.xnb</Output>
+      <Time>2018-03-20T12:50:18.661953-04:00</Time>
+    </Item>
+    <Item>
+      <Source>mercystaffR.png</Source>
+      <Name>mercystaffR</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\mercystaffR.xnb</Output>
+      <Time>2018-03-20T12:50:09.1833823-04:00</Time>
+    </Item>
+    <Item>
+      <Source>mercystaffU.png</Source>
+      <Name>mercystaffU</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\mercystaffU.xnb</Output>
+      <Time>2018-03-20T12:49:35.8372512-04:00</Time>
+    </Item>
+    <Item>
+      <Source>ReinHammerD.png</Source>
+      <Name>ReinHammerD</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\ReinHammerD.xnb</Output>
+      <Time>2018-03-20T12:52:23.4716496-04:00</Time>
+    </Item>
+    <Item>
+      <Source>ReinHammerR.png</Source>
+      <Name>ReinHammerR</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\ReinHammerR.xnb</Output>
+      <Time>2018-03-20T12:51:33.4420974-04:00</Time>
+    </Item>
+    <Item>
+      <Source>TorbHammerD.png</Source>
+      <Name>TorbHammerD</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\TorbHammerD.xnb</Output>
+      <Time>2018-03-20T12:55:52.6645013-04:00</Time>
+    </Item>
+    <Item>
+      <Source>TorbHammerL.png</Source>
+      <Name>TorbHammerL</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\TorbHammerL.xnb</Output>
+      <Time>2018-03-20T12:55:24.4842936-04:00</Time>
+    </Item>
+    <Item>
+      <Source>TorbHammerR.png</Source>
+      <Name>TorbHammerR</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\TorbHammerR.xnb</Output>
+      <Time>2018-03-20T12:55:38.848963-04:00</Time>
+    </Item>
+    <Item>
+      <Source>TorbHammerU.png</Source>
+      <Name>TorbHammerU</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\TorbHammerU.xnb</Output>
+      <Time>2018-03-20T12:56:00.8952227-04:00</Time>
+    </Item>
+    <Item>
+      <Source>ReinHammerL.png</Source>
+      <Name>ReinHammerL</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\ReinHammerL.xnb</Output>
+      <Time>2018-03-20T12:54:49.8662389-04:00</Time>
+    </Item>
+    <Item>
+      <Source>ReinHammerU.png</Source>
+      <Name>ReinHammerU</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\ReinHammerU.xnb</Output>
+      <Time>2018-03-20T12:55:00.3673769-04:00</Time>
+    </Item>
+    <Item>
+      <Source>reinhardtdeaddead.png</Source>
+      <Name>reinhardtdeaddead</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\reinhardtdeaddead.xnb</Output>
+      <Time>2018-03-02T16:07:16.1788576-05:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

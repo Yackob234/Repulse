@@ -12,12 +12,14 @@ namespace repulse
         private string _assetName;
         private Vector2 _speed;
         public DirectionEnum _direction;
+        private CharacterEnum _cha;
 
-        public Sword(EntityDrawData drawData, DirectionEnum direction, string assetName)
+        public Sword(EntityDrawData drawData, DirectionEnum direction, string assetName, CharacterEnum cha)
             : base(drawData, assetName)
         {
             _assetName = assetName;
             _direction = direction;
+            _cha = cha;
         }
 
         public override void Update(GameTime gameTime)

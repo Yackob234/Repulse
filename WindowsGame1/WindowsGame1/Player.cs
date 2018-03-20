@@ -16,8 +16,9 @@ namespace repulse
         private string _assetNameDead;
         private Vector2 _normalPosition;
         private Vector2 _adjustedPosition;
+        public CharacterEnum _character;
         
-        public Player(EntityDrawData drawData, string assetName, string assetNameHurt, string assetNameDead, int Health, bool Attacker)
+        public Player(EntityDrawData drawData, string assetName, string assetNameHurt, string assetNameDead, int Health, bool Attacker, CharacterEnum cha)
             : base(drawData, assetName)
         {
             health = Health;
@@ -25,6 +26,7 @@ namespace repulse
             _assetName = assetName;
             _assetNameHurt = assetNameHurt;
             _assetNameDead = assetNameDead;
+            _character = cha;
             _normalPosition = Position();
             _position = Position();
         }

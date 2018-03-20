@@ -33,6 +33,8 @@ namespace repulse
         public DirectionEnum attackDirection = DirectionEnum.Blank;
         public DirectionEnum blockDirection = DirectionEnum.Blank;
         public CharacterEnum characterChoice;
+        public CharacterEnum p1Character;
+        public CharacterEnum p2Character;
         public int timer = 0;
         public int timerLimit = 500;
         public int attackTimer = 0;
@@ -55,6 +57,9 @@ namespace repulse
         public int Stage = 1;
         public int xChoice = 0;
         public int yChoice = 0;
+        public bool BlockAnimation;
+        public bool DamageAnimation;
+        public int hitTimer = 0;
 
         //debugging variables:
         public int debug = -1;
@@ -80,7 +85,8 @@ namespace repulse
         private List<Controller> _controllers = new List<Controller>();
         private List<Entity> _entities = new List<Entity>();
         private Dictionary<DirectionEnum, Arrow> _arrows = new Dictionary<DirectionEnum, Arrow>();
-        private Dictionary<DirectionEnum, Sword> _swords = new Dictionary<DirectionEnum, Sword>();
+        private Dictionary<DirectionEnum, Sword> _swords1 = new Dictionary<DirectionEnum, Sword>();
+        private Dictionary<DirectionEnum, Sword> _swords2 = new Dictionary<DirectionEnum, Sword>();
         private Dictionary<CharacterEnum, Character> _characters = new Dictionary<CharacterEnum, Character>();
         SortedList<string, Texture2D> textures;
 
@@ -135,6 +141,7 @@ namespace repulse
                     Controller_Character(characterChoice, true, _currentController - 1);
                     _currentController++;
                     choiceTimer = 0;
+                    p1Character = characterChoice;
 
                 }
                 else if (_currentController == 1)
@@ -142,6 +149,7 @@ namespace repulse
                     Controller_Character(characterChoice, true, _currentController - 1);
                     _currentController++;
                     choiceTimer = 0;
+                    p2Character = characterChoice;
                     Stage++;
                     mainGameDeclair();
                 }
@@ -328,32 +336,104 @@ namespace repulse
             AddEntity(arrow);
         }
 
-        private void AddSword(DirectionEnum dir)
+        private void AddWeapon(DirectionEnum dir, CharacterEnum cha, int player)
         {
             //adds swords to a list, and gets the right sprites
             string _Texture;
             //swordR works for both down and Right, down was thus deleted to save space
-            switch (dir)
+
+            switch (cha)
             {
-                case DirectionEnum.Up:
-                    _Texture = "swordU";
+                case CharacterEnum.Mercy:
+                    switch (dir)
+                    {
+                        case DirectionEnum.Up:
+                            _Texture = "mercystaffU";
+                            break;
+                        case DirectionEnum.Down:
+                            _Texture = "mercystaffR";
+                            break;
+                        case DirectionEnum.Left:
+                            _Texture = "mercystaffL";
+                            break;
+                        case DirectionEnum.Right:
+                            _Texture = "mercystaffR";
+                            break;
+                        default:
+                            _Texture = null;
+                            break;
+                    }
                     break;
-                case DirectionEnum.Down:
-                    _Texture = "swordR";
+                case CharacterEnum.Reinhardt:
+                    switch (dir)
+                    {
+                        case DirectionEnum.Up:
+                            _Texture = "ReinHammerU";
+                            break;
+                        case DirectionEnum.Down:
+                            _Texture = "ReinHammerD";
+                            break;
+                        case DirectionEnum.Left:
+                            _Texture = "ReinHammerL";
+                            break;
+                        case DirectionEnum.Right:
+                            _Texture = "ReinHammerR";
+                            break;
+                        default:
+                            _Texture = null;
+                            break;
+                    }
                     break;
-                case DirectionEnum.Left:
-                    _Texture = "swordL";
-                    break;
-                case DirectionEnum.Right:
-                    _Texture = "swordR";
+                case CharacterEnum.Torbjorn:
+                    switch (dir)
+                    {
+                        case DirectionEnum.Up:
+                            _Texture = "TorbHammerU";
+                            break;
+                        case DirectionEnum.Down:
+                            _Texture = "TorbHammerD";
+                            break;
+                        case DirectionEnum.Left:
+                            _Texture = "TorbHammerL";
+                            break;
+                        case DirectionEnum.Right:
+                            _Texture = "TorbHammerR";
+                            break;
+                        default:
+                            _Texture = null;
+                            break;
+                    }
                     break;
                 default:
-                    _Texture = null;
+                    switch (dir)
+                    {
+                        case DirectionEnum.Up:
+                            _Texture = "swordU";
+                            break;
+                        case DirectionEnum.Down:
+                            _Texture = "swordR";
+                            break;
+                        case DirectionEnum.Left:
+                            _Texture = "swordL";
+                            break;
+                        case DirectionEnum.Right:
+                            _Texture = "swordR";
+                            break;
+                        default:
+                            _Texture = null;
+                            break;
+                    }
                     break;
-            }
 
-            var sword = new Sword(this, dir, _Texture);
-            _swords.Add(dir, sword);
+            }
+            var sword = new Sword(this, dir, _Texture, cha);
+            if (player == 1)
+            {
+                _swords2.Add(dir, sword);
+            } else if (player == 2)
+            {
+                _swords1.Add(dir, sword);
+            }
             AddEntity(sword);
         }
         private void AddCharacter(CharacterEnum cha)
@@ -430,10 +510,10 @@ namespace repulse
                 {
                     _p1.health--;
                 }
-                DamageAnimation();
+                DamageAnimation = true;
             } else if (blockDirection == attackDirection && blockDirection != DirectionEnum.Blank)
             {
-                BlockAnimation();
+                BlockAnimation = true;
             }
             if (_victor == 0) {
                 if (_p2.health == 0) _victor = 1;
@@ -497,24 +577,31 @@ namespace repulse
                 attackTimerLimit += -3;
                 if (attackDirection != DirectionEnum.Blank)
                 {
-                    _swords[attackDirection].resetSwordPosition(attackDirection);
-                    _swords[attackDirection].resetSwordSpeed(attackDirection, attackTimerLimit);
+                    if (_currentController == 1)
+                    {
+                        _swords1[attackDirection].resetSwordPosition(attackDirection);
+                        _swords1[attackDirection].resetSwordSpeed(attackDirection, attackTimerLimit);
+                    } else if (_currentController == 2)
+                    {
+                        _swords2[attackDirection].resetSwordPosition(attackDirection);
+                        _swords2[attackDirection].resetSwordSpeed(attackDirection, attackTimerLimit);
+                    }
+
                 }
                 
                 damage();
             }
             if (attackCast == true)
             {
-                _swords[attackDirection].swordMovement(gameTime);
+                if (_currentController == 1)
+                {
+                    _swords1[attackDirection].swordMovement(gameTime);
+                }
+                else if (_currentController == 2)
+                {
+                    _swords2[attackDirection].swordMovement(gameTime);
+                }
             }
-
-        }
-        public void DamageAnimation()
-        {
-
-        }
-        public void BlockAnimation()
-        {
 
         }
 
@@ -532,8 +619,8 @@ namespace repulse
 
         public void mainGameDeclair()
         {
-            _p1 = new Player(this, alive[0], Dead[0], deaddead[0], 2, false);
-            _p2 = new Player(this, alive[1], Dead[1], deaddead[1], 2, true);
+            _p1 = new Player(this, alive[0], Dead[0], deaddead[0], 2, false, p1Character);
+            _p2 = new Player(this, alive[1], Dead[1], deaddead[1], 2, true, p2Character);
 
             _entities.Add(_p1);
             _entities.Add(_p2);
@@ -543,19 +630,34 @@ namespace repulse
             AddArrow(DirectionEnum.Left);
             AddArrow(DirectionEnum.Right);
 
-            AddSword(DirectionEnum.Up);
-            AddSword(DirectionEnum.Down);
-            AddSword(DirectionEnum.Left);
-            AddSword(DirectionEnum.Right);
+            AddWeapon(DirectionEnum.Up, _p1._character, 1);
+            AddWeapon(DirectionEnum.Down, _p1._character, 1);
+            AddWeapon(DirectionEnum.Left, _p1._character, 1);
+            AddWeapon(DirectionEnum.Right, _p1._character, 1);
+            AddWeapon(DirectionEnum.Up, _p2._character, 2);
+            AddWeapon(DirectionEnum.Down, _p2._character, 2);
+            AddWeapon(DirectionEnum.Left, _p2._character, 2);
+            AddWeapon(DirectionEnum.Right, _p2._character, 2);
 
-            _swords[DirectionEnum.Up].resetSwordPosition(DirectionEnum.Up);
-            _swords[DirectionEnum.Left].resetSwordPosition(DirectionEnum.Left);
-            _swords[DirectionEnum.Down].resetSwordPosition(DirectionEnum.Down);
-            _swords[DirectionEnum.Right].resetSwordPosition(DirectionEnum.Right);
-            _swords[DirectionEnum.Up].resetSwordSpeed(DirectionEnum.Up, attackTimerLimit);
-            _swords[DirectionEnum.Left].resetSwordSpeed(DirectionEnum.Left, attackTimerLimit);
-            _swords[DirectionEnum.Down].resetSwordSpeed(DirectionEnum.Down, attackTimerLimit);
-            _swords[DirectionEnum.Right].resetSwordSpeed(DirectionEnum.Right, attackTimerLimit);
+
+
+            _swords1[DirectionEnum.Up].resetSwordPosition(DirectionEnum.Up);
+            _swords1[DirectionEnum.Left].resetSwordPosition(DirectionEnum.Left);
+            _swords1[DirectionEnum.Down].resetSwordPosition(DirectionEnum.Down);
+            _swords1[DirectionEnum.Right].resetSwordPosition(DirectionEnum.Right);
+            _swords1[DirectionEnum.Up].resetSwordSpeed(DirectionEnum.Up, attackTimerLimit);
+            _swords1[DirectionEnum.Left].resetSwordSpeed(DirectionEnum.Left, attackTimerLimit);
+            _swords1[DirectionEnum.Down].resetSwordSpeed(DirectionEnum.Down, attackTimerLimit);
+            _swords1[DirectionEnum.Right].resetSwordSpeed(DirectionEnum.Right, attackTimerLimit);
+
+            _swords2[DirectionEnum.Up].resetSwordPosition(DirectionEnum.Up);
+            _swords2[DirectionEnum.Left].resetSwordPosition(DirectionEnum.Left);
+            _swords2[DirectionEnum.Down].resetSwordPosition(DirectionEnum.Down);
+            _swords2[DirectionEnum.Right].resetSwordPosition(DirectionEnum.Right);
+            _swords2[DirectionEnum.Up].resetSwordSpeed(DirectionEnum.Up, attackTimerLimit);
+            _swords2[DirectionEnum.Left].resetSwordSpeed(DirectionEnum.Left, attackTimerLimit);
+            _swords2[DirectionEnum.Down].resetSwordSpeed(DirectionEnum.Down, attackTimerLimit);
+            _swords2[DirectionEnum.Right].resetSwordSpeed(DirectionEnum.Right, attackTimerLimit);
 
             for (var i = 0; i < _entities.Count; ++i)
             {
@@ -710,8 +812,40 @@ _currentController: {12}
                 {
                     const string victoryText = @"
 Player {0} Wins!!
-"; spriteBatch.DrawString(font, String.Format(victoryText, _victor), new Vector2(450.0f, 0.0f), Color.White);
+";
+                    spriteBatch.DrawString(font, String.Format(victoryText, _victor), new Vector2(450.0f, 0.0f), Color.White);
                 }
+
+                if (BlockAnimation)
+                {
+                    hitTimer++;
+                    const string blockText = @"
+Block!!
+";
+                    spriteBatch.DrawString(font, String.Format(blockText, _currentController), new Vector2(450.0f, 50.0f), Color.White);
+                    if (hitTimer > 50) { 
+                        BlockAnimation = false;
+                        hitTimer = 0;
+                    }
+                }
+                if (DamageAnimation)
+                {
+                    hitTimer++;
+                    const string damageText = @"
+Hit!!
+";
+                    spriteBatch.DrawString(font, String.Format(damageText, _currentController), new Vector2(450.0f, 50.0f), Color.White);
+                    if (hitTimer > 50)
+                    {
+                        DamageAnimation = false;
+                        hitTimer = 0;
+                    }
+                }
+
+
+
+
+
             } else if (Stage == 3)
             {
 
