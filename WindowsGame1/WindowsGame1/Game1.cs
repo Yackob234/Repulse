@@ -95,6 +95,10 @@ namespace repulse
             {
                 drawData.startDebug();
             }
+            if (newState.IsKeyDown(Keys.P))
+            {
+                drawData.pauseGame();
+            }
             drawData.Update(gameTime);
             base.Update(gameTime);
         }

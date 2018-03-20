@@ -7,14 +7,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace repulse
 {
-    class Sword : Entity
+    class Weapon : Entity
     {
         private string _assetName;
         private Vector2 _speed;
         public DirectionEnum _direction;
         private CharacterEnum _cha;
 
-        public Sword(EntityDrawData drawData, DirectionEnum direction, string assetName, CharacterEnum cha)
+        public Weapon(EntityDrawData drawData, DirectionEnum direction, string assetName, CharacterEnum cha)
             : base(drawData, assetName)
         {
             _assetName = assetName;
@@ -27,35 +27,37 @@ namespace repulse
             base.Update(gameTime);
         }
 
-        public void resetSwordPosition(DirectionEnum dir)
+        public void resetWeaponPosition(DirectionEnum dir)
         {
-            Vector2 swordPosition;
+            //resets the weapon that was moved back to off screen
+            Vector2 weaponPosition;
             switch (dir)
             {
                 case DirectionEnum.Up:
-                    swordPosition = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 - _texture.Width / 2, - _texture.Height);
+                    weaponPosition = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 - _texture.Width / 2, - _texture.Height);
                     break;
                 case DirectionEnum.Down:
-                    swordPosition = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 - _texture.Width / 2, _drawData.GraphicsDevice.Viewport.Height);
+                    weaponPosition = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 - _texture.Width / 2, _drawData.GraphicsDevice.Viewport.Height);
                     break;
                 case DirectionEnum.Left:
-                    swordPosition = new Vector2(-_texture.Width, _drawData.GraphicsDevice.Viewport.Height / 2 - _texture.Height / 2);
+                    weaponPosition = new Vector2(-_texture.Width, _drawData.GraphicsDevice.Viewport.Height / 2 - _texture.Height / 2);
                     break;
                 case DirectionEnum.Right:
-                    swordPosition = new Vector2(_drawData.GraphicsDevice.Viewport.Width, _drawData.GraphicsDevice.Viewport.Height / 2 - _texture.Height / 2);
+                    weaponPosition = new Vector2(_drawData.GraphicsDevice.Viewport.Width, _drawData.GraphicsDevice.Viewport.Height / 2 - _texture.Height / 2);
                     break;
                 default:
-                    swordPosition = Vector2.Zero;
+                    weaponPosition = Vector2.Zero;
                     break;
             }
-            _position = swordPosition;
+            _position = weaponPosition;
         }
 
-        public void resetSwordSpeed(DirectionEnum dir, int time)
+        public void resetWeaponSpeed(DirectionEnum dir, int time)
         {
+            //updates the speed of the weapon
             float xSpeed;
             float ySpeed;
-            Vector2 swordSpeed;
+            Vector2 weaponSpeed;
             int xDistance = _drawData.GraphicsDevice.Viewport.Width / 2 + _texture.Width;
             int yDistance = _drawData.GraphicsDevice.Viewport.Height / 2 + _texture.Height;
 
@@ -64,26 +66,27 @@ namespace repulse
             switch (dir)
             {
                 case DirectionEnum.Up:
-                    swordSpeed = new Vector2(0.0f, ySpeed);
+                    weaponSpeed = new Vector2(0.0f, ySpeed);
                     break;
                 case DirectionEnum.Down:
-                    swordSpeed = new Vector2(0.0f, -ySpeed);
+                    weaponSpeed = new Vector2(0.0f, -ySpeed);
                     break;
                 case DirectionEnum.Left:
-                    swordSpeed = new Vector2(xSpeed, 0.0f);
+                    weaponSpeed = new Vector2(xSpeed, 0.0f);
                     break;
                 case DirectionEnum.Right:
-                    swordSpeed = new Vector2(-xSpeed, 0.0f);
+                    weaponSpeed = new Vector2(-xSpeed, 0.0f);
                     break;
                 default:
-                    swordSpeed = Vector2.Zero;
+                    weaponSpeed = Vector2.Zero;
                     break;
             }
-            _speed = swordSpeed;
+            _speed = weaponSpeed;
         }
 
-        public void swordMovement(GameTime gameTime)
+        public void weaponMovement(GameTime gameTime)
         {
+            //moves the weapon
             _position += _speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             
         }

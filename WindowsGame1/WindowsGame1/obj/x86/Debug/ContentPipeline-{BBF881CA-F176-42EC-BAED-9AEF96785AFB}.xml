@@ -119,15 +119,6 @@
       <Time>2018-02-27T13:53:37.5052092-05:00</Time>
     </Item>
     <Item>
-      <Source>SpriteFont_sml.spritefont</Source>
-      <Name>SpriteFont_sml</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\SpriteFont_sml.xnb</Output>
-      <Time>2018-02-23T17:10:55.0076591-05:00</Time>
-    </Item>
-    <Item>
       <Source>genji1.png</Source>
       <Name>genji1</Name>
       <Importer>TextureImporter</Importer>
@@ -234,6 +225,15 @@
       <Options>None</Options>
       <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\reinhardtDead.xnb</Output>
       <Time>2018-03-02T16:07:52.1447484-05:00</Time>
+    </Item>
+    <Item>
+      <Source>reinhardtdeaddead.png</Source>
+      <Name>reinhardtdeaddead</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\reinhardtdeaddead.xnb</Output>
+      <Time>2018-03-02T16:07:16.1788576-05:00</Time>
     </Item>
     <Item>
       <Source>torbjorn.jpg</Source>
@@ -371,13 +371,13 @@
       <Time>2018-03-20T12:55:00.3673769-04:00</Time>
     </Item>
     <Item>
-      <Source>reinhardtdeaddead.png</Source>
-      <Name>reinhardtdeaddead</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
+      <Source>SpriteFont_sml.spritefont</Source>
+      <Name>SpriteFont_sml</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
       <Options>None</Options>
-      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\reinhardtdeaddead.xnb</Output>
-      <Time>2018-03-02T16:07:16.1788576-05:00</Time>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\SpriteFont_sml.xnb</Output>
+      <Time>2018-02-23T17:10:55.0076591-05:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

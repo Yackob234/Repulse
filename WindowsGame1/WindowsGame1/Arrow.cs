@@ -21,35 +21,37 @@ namespace repulse
 
         private Vector2 IndiPos(DirectionEnum direction)
         {
-            Vector2 position= Vector2.Zero;
-            
-            switch (direction)
-            {
-                case DirectionEnum.Up:
-                    position = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 + _texture.Width / 2, _drawData.GraphicsDevice.Viewport.Height / 2 + _texture.Height / 2 - _texture.Height * 2);
-                    break;
-                case DirectionEnum.Right:
-                    position = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 + _texture.Width / 2 + _texture.Width * 2, _drawData.GraphicsDevice.Viewport.Height / 2 + _texture.Height / 2);
-                    break;
-                case DirectionEnum.Down:
-                    position = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 + _texture.Width / 2, _drawData.GraphicsDevice.Viewport.Height / 2 + _texture.Height / 2 + _texture.Height * 2);
-                    break;
-                case DirectionEnum.Left:
-                    position = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 + _texture.Width / 2 - _texture.Width * 2, _drawData.GraphicsDevice.Viewport.Height / 2 + _texture.Height / 2);
-                    break;
-            }
-            
+            //finds the position for the arrow sprites
+            Vector2 position = new Vector2(1000, 1000);
+            if (Stage == 2) { 
+                switch (direction)
+                {
+                    case DirectionEnum.Up:
+                        position = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 + _texture.Width / 2, _drawData.GraphicsDevice.Viewport.Height / 2 + _texture.Height / 2 - _texture.Height * 2);
+                        break;
+                    case DirectionEnum.Right:
+                        position = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 + _texture.Width / 2 + _texture.Width * 2, _drawData.GraphicsDevice.Viewport.Height / 2 + _texture.Height / 2);
+                        break;
+                    case DirectionEnum.Down:
+                        position = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 + _texture.Width / 2, _drawData.GraphicsDevice.Viewport.Height / 2 + _texture.Height / 2 + _texture.Height * 2);
+                        break;
+                    case DirectionEnum.Left:
+                        position = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 + _texture.Width / 2 - _texture.Width * 2, _drawData.GraphicsDevice.Viewport.Height / 2 + _texture.Height / 2);
+                        break;
+                }
+            } 
             return position;
         }
 
         public override void Update(GameTime gameTime)
         {
+            _position = IndiPos(_direction);
             base.Update(gameTime);
         }  
 
         public void Toggle(bool pressed)
         {
-            
+            //switches from on and off
             string asset = pressed ? _onAssetName : _offAssetName;
             _texture = _drawData.LoadTexture(asset);
             

@@ -60,12 +60,16 @@ namespace repulse
         public bool BlockAnimation;
         public bool DamageAnimation;
         public int hitTimer = 0;
-
+        public bool weaponSpeedNeedReset = true;
+        public bool initCompleted = false;
         //debugging variables:
         public int debug = -1;
         public int ChangedAttackerRan = 0;
         public int debugDelay = 0;
         public int debugDelayLimit = 25;
+        public int pause = -1;
+        public int pauseDelay = 0;
+        public int pauseDelayLimit = 25;
 
         //private variables
         private GraphicsDevice graphicsDevice;
@@ -85,12 +89,14 @@ namespace repulse
         private List<Controller> _controllers = new List<Controller>();
         private List<Entity> _entities = new List<Entity>();
         private Dictionary<DirectionEnum, Arrow> _arrows = new Dictionary<DirectionEnum, Arrow>();
-        private Dictionary<DirectionEnum, Sword> _swords1 = new Dictionary<DirectionEnum, Sword>();
-        private Dictionary<DirectionEnum, Sword> _swords2 = new Dictionary<DirectionEnum, Sword>();
+        private Dictionary<DirectionEnum, Weapon> _weapons1 = new Dictionary<DirectionEnum, Weapon>();
+        private Dictionary<DirectionEnum, Weapon> _weapons2 = new Dictionary<DirectionEnum, Weapon>();
         private Dictionary<CharacterEnum, Character> _characters = new Dictionary<CharacterEnum, Character>();
         SortedList<string, Texture2D> textures;
 
-        private int _currentController = 2;
+        private int _currentController = 1;
+        private bool _lastStand = false;
+        private bool _initLastStand = false;
         
         public EntityDrawData(GraphicsDevice graphicsDevice, ContentManager contentManager)
         {
@@ -134,31 +140,42 @@ namespace repulse
 
         private void Controller_Action(Controller controller, ActionEnum act, bool pressed)
         {
-            if (_controllers.IndexOf(controller) == _currentController - 1 && choiceTimer>=choiceTimerLimit)
+            //takes actions of the enter key
+            if (Stage == 1)
             {
-                if (_currentController == 2)
+                if (_controllers.IndexOf(controller) == _currentController - 1 && choiceTimer >= choiceTimerLimit)
                 {
-                    Controller_Character(characterChoice, true, _currentController - 1);
-                    _currentController++;
-                    choiceTimer = 0;
-                    p1Character = characterChoice;
+                    if (_currentController == 1)
+                    {
+                        Controller_Character(characterChoice, true, _currentController - 1);
+                        _currentController++;
+                        choiceTimer = 0;
+                        p1Character = characterChoice;
+
+                    }
+                    else if (_currentController == 2)
+                    {
+                        Controller_Character(characterChoice, true, _currentController - 1);
+                        choiceTimer = 0;
+                        p2Character = characterChoice;
+                        
+                        if(initCompleted == false) mainGameDeclair();
+                        stageChange();
+                        pauseDelay = 0;
+                    }
 
                 }
-                else if (_currentController == 1)
+
+                else if (_controllers.IndexOf(controller) != _currentController - 1)
                 {
-                    Controller_Character(characterChoice, true, _currentController - 1);
-                    _currentController++;
-                    choiceTimer = 0;
-                    p2Character = characterChoice;
-                    Stage++;
-                    mainGameDeclair();
+
                 }
+            } else if (Stage == 2)
+            {
                 
-            }
-
-            else if (_controllers.IndexOf(controller) != _currentController - 1)
+            } else if (Stage == 3)
             {
-
+                resetGame();
             }
         }
         private void Controller_Direction(Controller controller, DirectionEnum dir, bool pressed)
@@ -200,7 +217,7 @@ namespace repulse
                 {
 
                     // attacker
-                    //Console.WriteLine("attacker");
+                    // Console.WriteLine("attacker");
                     if (pressed) pressedExtention = true;
 
                     _arrows[dir].Toggle(pressedExtention);
@@ -219,6 +236,8 @@ namespace repulse
         
         public void precharacter()
         {
+            //declears stuff before so it does crash :)
+
             /*
             for (int chosenCharacter = 0; chosenCharacter < 2; chosenCharacter++)
             {
@@ -241,6 +260,8 @@ namespace repulse
 
         private void Controller_Character(CharacterEnum cha, bool pressed, int chosenCharacter)
         {
+            //chooses the sprite for each player
+
             //if you cannot attack return
             
             
@@ -298,6 +319,7 @@ namespace repulse
 
         private Entity AddEntity(Entity entity)
         {
+            //adds sprites to a list of entities
             _entities.Add(entity);
             return entity;
         }
@@ -338,7 +360,7 @@ namespace repulse
 
         private void AddWeapon(DirectionEnum dir, CharacterEnum cha, int player)
         {
-            //adds swords to a list, and gets the right sprites
+            //adds weapons to a list, and gets the right sprites
             string _Texture;
             //swordR works for both down and Right, down was thus deleted to save space
 
@@ -426,19 +448,19 @@ namespace repulse
                     break;
 
             }
-            var sword = new Sword(this, dir, _Texture, cha);
+            var weapon = new Weapon(this, dir, _Texture, cha);
             if (player == 1)
             {
-                _swords2.Add(dir, sword);
+                _weapons1.Add(dir, weapon);
             } else if (player == 2)
             {
-                _swords1.Add(dir, sword);
+                _weapons2.Add(dir, weapon);
             }
-            AddEntity(sword);
+            AddEntity(weapon);
         }
         private void AddCharacter(CharacterEnum cha)
         {
-            //adds arrows to a list, and gets the right sprites
+            //adds a picture for the selection screen for each CharacterEnum
             string Texture;
 
             switch (cha)
@@ -499,8 +521,19 @@ namespace repulse
                 debugDelay = 0;
             }
         }
+
+        public void pauseGame()
+        {
+            if (pauseDelay > pauseDelayLimit)
+            {
+
+                pause *= -1;
+                pauseDelay = 0;
+            }
+        }
         public void damage()
         {
+            //checks if attack was blocked and says what to do
             if (attackDirection != blockDirection && attackDirection != DirectionEnum.Blank)
             {
                 if (_p1.attacker)
@@ -510,20 +543,55 @@ namespace repulse
                 {
                     _p1.health--;
                 }
+
+                if (_lastStand)
+                {
+                    if (_p1.attacker)
+                    {
+                        _p1.health++;
+                    }
+                    else if (_p2.attacker)
+                    {
+                        _p2.health++;
+                    }
+                    attackTimerLimit += 10;
+                    _lastStand = false;
+                }
+
                 DamageAnimation = true;
+
             } else if (blockDirection == attackDirection && blockDirection != DirectionEnum.Blank)
             {
+                if (_lastStand)
+                {
+                    if (_p1.attacker)
+                    {
+                        _p1.health--;
+                    }
+                    else if (_p2.attacker)
+                    {
+                        _p2.health--;
+                    }
+                    _lastStand = false;
+                }
                 BlockAnimation = true;
             }
+
+            
+
             if (_victor == 0) {
-                if (_p2.health == 0) _victor = 1;
-                else if (_p1.health == 0) _victor = 2;
+                if (_p2.health == 0) lastStand(2);
+                if (_p1.health == 0) lastStand(1);
+
+                if (_p2.health == -1) _victor = 1;
+                else if (_p1.health == -1) _victor = 2;
             }
             ChangeAttacker();
 
             attackDirection = DirectionEnum.Blank;
             blockDirection = DirectionEnum.Blank;
             timer = 0;
+            weaponSpeedNeedReset = true;
 
 
         }
@@ -535,6 +603,18 @@ namespace repulse
             newAttacker = true;
             ChangedAttackerRan++;
             ++_currentController;
+            if (_lastStand && _initLastStand == false)
+            {
+                if (_p1.attacker)
+                {
+                    _p2.health--;
+                }
+                else if (_p2.attacker)
+                {
+                    _p1.health--;
+                }
+                _lastStand = false;
+            }
             if (_p1.attacker)
             {
                 _p1.attacker = false;
@@ -554,7 +634,7 @@ namespace repulse
         
         public void AttackAnimation(GameTime gameTime)
         {
-            //animation
+            //logic for the attacking
             attackCast = true;
             attackTimer++;
             
@@ -574,17 +654,19 @@ namespace repulse
                 pressedExtention = false;
                 attackTimer = 0;
                 attackCast = false;
-                attackTimerLimit += -3;
+                attackTimerLimit = Convert.ToInt32(attackTimerLimit / 1.1) -1;
+                if(attackTimerLimit <= 1)
+                {
+                    attackTimerLimit = 2;
+                }
                 if (attackDirection != DirectionEnum.Blank)
                 {
                     if (_currentController == 1)
                     {
-                        _swords1[attackDirection].resetSwordPosition(attackDirection);
-                        _swords1[attackDirection].resetSwordSpeed(attackDirection, attackTimerLimit);
+                        _weapons1[attackDirection].resetWeaponPosition(attackDirection);
                     } else if (_currentController == 2)
                     {
-                        _swords2[attackDirection].resetSwordPosition(attackDirection);
-                        _swords2[attackDirection].resetSwordSpeed(attackDirection, attackTimerLimit);
+                        _weapons2[attackDirection].resetWeaponPosition(attackDirection);
                     }
 
                 }
@@ -593,19 +675,26 @@ namespace repulse
             }
             if (attackCast == true)
             {
+                if (weaponSpeedNeedReset)
+                {
+                    _weapons1[attackDirection].resetWeaponSpeed(attackDirection, attackTimerLimit);
+                    _weapons2[attackDirection].resetWeaponSpeed(attackDirection, attackTimerLimit);
+                    weaponSpeedNeedReset = false;
+                }
                 if (_currentController == 1)
                 {
-                    _swords1[attackDirection].swordMovement(gameTime);
+                    _weapons1[attackDirection].weaponMovement(gameTime);
                 }
                 else if (_currentController == 2)
                 {
-                    _swords2[attackDirection].swordMovement(gameTime);
+                    _weapons2[attackDirection].weaponMovement(gameTime);
                 }
             }
 
         }
 
         public void newAttackerDelay(){
+            //adds a delay so you cant hold down a key
             if (newAttacker == true)
             {
                 attackDelayTimer++;
@@ -617,8 +706,33 @@ namespace repulse
             }
         }
 
+        public void lastStand(int dyingPlayer)
+        {
+            _lastStand = true;
+
+            if (_initLastStand == true) _initLastStand = false;
+
+            _initLastStand = true;
+                
+        }
+
+        public void resetGame()
+        {
+            stageChange();
+            _victor = 0;
+            _p1.health = 2;
+            _p2.health = 2;
+            attackTimerLimit = 70;
+            _currentController = 1;
+            xChoice = 0;
+            yChoice = 0;
+        }
+
+
+
         public void mainGameDeclair()
         {
+            //declairs the main game after the character choosing has finished
             _p1 = new Player(this, alive[0], Dead[0], deaddead[0], 2, false, p1Character);
             _p2 = new Player(this, alive[1], Dead[1], deaddead[1], 2, true, p2Character);
 
@@ -641,32 +755,45 @@ namespace repulse
 
 
 
-            _swords1[DirectionEnum.Up].resetSwordPosition(DirectionEnum.Up);
-            _swords1[DirectionEnum.Left].resetSwordPosition(DirectionEnum.Left);
-            _swords1[DirectionEnum.Down].resetSwordPosition(DirectionEnum.Down);
-            _swords1[DirectionEnum.Right].resetSwordPosition(DirectionEnum.Right);
-            _swords1[DirectionEnum.Up].resetSwordSpeed(DirectionEnum.Up, attackTimerLimit);
-            _swords1[DirectionEnum.Left].resetSwordSpeed(DirectionEnum.Left, attackTimerLimit);
-            _swords1[DirectionEnum.Down].resetSwordSpeed(DirectionEnum.Down, attackTimerLimit);
-            _swords1[DirectionEnum.Right].resetSwordSpeed(DirectionEnum.Right, attackTimerLimit);
+            _weapons1[DirectionEnum.Up].resetWeaponPosition(DirectionEnum.Up);
+            _weapons1[DirectionEnum.Left].resetWeaponPosition(DirectionEnum.Left);
+            _weapons1[DirectionEnum.Down].resetWeaponPosition(DirectionEnum.Down);
+            _weapons1[DirectionEnum.Right].resetWeaponPosition(DirectionEnum.Right);
+            _weapons1[DirectionEnum.Up].resetWeaponSpeed(DirectionEnum.Up, attackTimerLimit);
+            _weapons1[DirectionEnum.Left].resetWeaponSpeed(DirectionEnum.Left, attackTimerLimit);
+            _weapons1[DirectionEnum.Down].resetWeaponSpeed(DirectionEnum.Down, attackTimerLimit);
+            _weapons1[DirectionEnum.Right].resetWeaponSpeed(DirectionEnum.Right, attackTimerLimit);
 
-            _swords2[DirectionEnum.Up].resetSwordPosition(DirectionEnum.Up);
-            _swords2[DirectionEnum.Left].resetSwordPosition(DirectionEnum.Left);
-            _swords2[DirectionEnum.Down].resetSwordPosition(DirectionEnum.Down);
-            _swords2[DirectionEnum.Right].resetSwordPosition(DirectionEnum.Right);
-            _swords2[DirectionEnum.Up].resetSwordSpeed(DirectionEnum.Up, attackTimerLimit);
-            _swords2[DirectionEnum.Left].resetSwordSpeed(DirectionEnum.Left, attackTimerLimit);
-            _swords2[DirectionEnum.Down].resetSwordSpeed(DirectionEnum.Down, attackTimerLimit);
-            _swords2[DirectionEnum.Right].resetSwordSpeed(DirectionEnum.Right, attackTimerLimit);
+            _weapons2[DirectionEnum.Up].resetWeaponPosition(DirectionEnum.Up);
+            _weapons2[DirectionEnum.Left].resetWeaponPosition(DirectionEnum.Left);
+            _weapons2[DirectionEnum.Down].resetWeaponPosition(DirectionEnum.Down);
+            _weapons2[DirectionEnum.Right].resetWeaponPosition(DirectionEnum.Right);
+            _weapons2[DirectionEnum.Up].resetWeaponSpeed(DirectionEnum.Up, attackTimerLimit);
+            _weapons2[DirectionEnum.Left].resetWeaponSpeed(DirectionEnum.Left, attackTimerLimit);
+            _weapons2[DirectionEnum.Down].resetWeaponSpeed(DirectionEnum.Down, attackTimerLimit);
+            _weapons2[DirectionEnum.Right].resetWeaponSpeed(DirectionEnum.Right, attackTimerLimit);
 
-            for (var i = 0; i < _entities.Count; ++i)
+            
+            initCompleted = true;
+        }
+
+        public void stageChange()
+        {
+            Stage++;
+            for (var i = 0; i < _entities.Count; i++)
             {
                 _entities[i].StageUpdate();
             }
+            if(Stage == 4)
+            {
+                Stage = 1;
+            }
+            //hi
         }
 
         public void playersCharacterChoice()
         {
+            //converts selection box coorditate to a CharacterEnum
             if (moveChoiceTimer >= moveChoiceTimerLimit)
             {
                 if (chosen.x == 0)
@@ -707,43 +834,59 @@ namespace repulse
 
         public void Update(GameTime gameTime)
         {
-            
             debugDelay++;
+            pauseDelay++;
             elapsedTime += gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (Stage == 1)
-            {
-                choiceTimer++;
-                moveChoiceTimer++;
-                playersCharacterChoice();
-            }
-            else if (Stage == 2)
+            if (pause == -1)
             {
                 
-                // CharacterChoice.Update(gameTime);
-                timer++;
-                newAttackerDelay();
-                if (attack == true)
+                if (Stage == 1)
                 {
-                    AttackAnimation(gameTime);
+                    choiceTimer++;
+                    moveChoiceTimer++;
+                    playersCharacterChoice();
                 }
-                if (timer > timerLimit)
+                else if (Stage == 2)
                 {
-                    timer = 0;
-                    ChangeAttacker();
-                }
-                
-            }
-            else if (Stage == 3)
-            {
 
-            }
-            else
-            {
-                Stage = 1;
-            }
-            for (var i = 0; i < _entities.Count; ++i)
-            {
-                _entities[i].Update(gameTime);
+                    // CharacterChoice.Update(gameTime);
+                    timer++;
+                    newAttackerDelay();
+                    if (_victor != 0)
+                    {
+
+                        stageChange();
+                    }
+                    if (attack == true)
+                    {
+                        AttackAnimation(gameTime);
+                    }
+                    if (timer > timerLimit)
+                    {
+                        timer = 0;
+                        ChangeAttacker();
+                    }
+
+                }
+                else if (Stage == 3)
+                {
+
+                }
+                else
+                {
+                    Stage = 1;
+                }
+                for (var i = 0; i < _entities.Count; ++i)
+                {
+                    _entities[i].Update(gameTime);
+                }
+                
+                for (var i = 0; i < _controllers.Count; ++i)
+                {
+                    _controllers[i].Update(gameTime);
+                }
+                if (_currentController >= 3)
+                    _currentController = 1;
             }
             if (elapsedTime >= 1000.0f)
             {
@@ -751,24 +894,17 @@ namespace repulse
                 totalFrames = 0;
                 elapsedTime = 0;
             }
-            for (var i = 0; i < _controllers.Count; ++i)
-            {
-                _controllers[i].Update(gameTime);
-            }
-            if (_currentController >= 3)
-                _currentController = 1;
         }
 
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-
             ++totalFrames;
-            
-            if (Stage == 1)
-            {
-                if (debug > 0)
-                {
-                    const string debugInfo = @"
+
+                if (Stage == 1)
+                {   
+                    if (debug > 0)
+                    {
+                        const string debugInfo = @"
 FPS: {0}
 _currentController: {1}
 chosen.x: {2}
@@ -776,20 +912,21 @@ chosen.y: {3}
 characterChoice: {4}
 choiceTimer: {5}
 moveChoiceTimer: {6}
+Stage: {7}
 ";
-                    spriteBatch.DrawString(font, String.Format(debugInfo, fps, _currentController, chosen.x, chosen.y, characterChoice, choiceTimer, moveChoiceTimer), new Vector2(5.0f, 0.0f), Color.White);
-                }
+                        spriteBatch.DrawString(font, String.Format(debugInfo, fps, _currentController, chosen.x, chosen.y, characterChoice, choiceTimer, moveChoiceTimer, Stage), new Vector2(5.0f, 0.0f), Color.White);
+                    }
 
-                const string instructions = @"
+                    const string instructions = @"
 Player {0}: please choose a Character
 ";
-                spriteBatch.DrawString(font, String.Format(instructions, _currentController), new Vector2(350, 0.0f), Color.White);
-            }
-            else if (Stage == 2)
-            {
-                if (debug > 0)
+                    spriteBatch.DrawString(font, String.Format(instructions, _currentController), new Vector2(350, 0.0f), Color.White, 0, Vector2.Zero, 1.25f, SpriteEffects.None, 0);
+                }
+                else if (Stage == 2)
                 {
-                    const string debugInfo = @"
+                    if (debug > 0)
+                    {
+                        const string debugInfo = @"
 FPS: {0}
 Attacker is Player 1: {1}
 Attacker is Player 2: {10}
@@ -803,58 +940,99 @@ Attack Delay Timer: {8}
 Changed Attacker Ran: {9} times
 AttackTimerLimit:{11}
 _currentController: {12}
+Stage: {13}
 ";
-                    spriteBatch.DrawString(font, String.Format(debugInfo, fps, _p1.attacker, attackDirection, blockDirection, timer, _p1.health,
-                        _p2.health, newAttacker, attackDelayTimer, ChangedAttackerRan, _p2.attacker, attackTimerLimit, _currentController
-                        ), new Vector2(5.0f, 0.0f), Color.White);
-                }
-                if (_victor != 0)
-                {
-                    const string victoryText = @"
-Player {0} Wins!!
-";
-                    spriteBatch.DrawString(font, String.Format(victoryText, _victor), new Vector2(450.0f, 0.0f), Color.White);
-                }
+                        spriteBatch.DrawString(font, String.Format(debugInfo, fps, _p1.attacker, attackDirection, blockDirection, timer, _p1.health,
+                            _p2.health, newAttacker, attackDelayTimer, ChangedAttackerRan, _p2.attacker, attackTimerLimit, _currentController, Stage
+                            ), new Vector2(5.0f, 0.0f), Color.White);
+                    }
 
-                if (BlockAnimation)
-                {
-                    hitTimer++;
-                    const string blockText = @"
+                    if (BlockAnimation)
+                    {
+                        hitTimer++;
+                        const string blockText = @"
 Block!!
 ";
-                    spriteBatch.DrawString(font, String.Format(blockText, _currentController), new Vector2(450.0f, 50.0f), Color.White);
-                    if (hitTimer > 50) { 
-                        BlockAnimation = false;
-                        hitTimer = 0;
+                        spriteBatch.DrawString(font, String.Format(blockText, _currentController), new Vector2(445.0f, 50.0f), Color.White, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
+                        if (hitTimer > 50)
+                        {
+                            BlockAnimation = false;
+                            hitTimer = 0;
+                        }
                     }
-                }
-                if (DamageAnimation)
-                {
-                    hitTimer++;
-                    const string damageText = @"
+                    if (DamageAnimation)
+                    {
+                        hitTimer++;
+                        const string damageText = @"
 Hit!!
 ";
-                    spriteBatch.DrawString(font, String.Format(damageText, _currentController), new Vector2(450.0f, 50.0f), Color.White);
-                    if (hitTimer > 50)
+                        spriteBatch.DrawString(font, String.Format(damageText, _currentController), new Vector2(450.0f, 50.0f), Color.White, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
+                        if (hitTimer > 50)
+                        {
+                            DamageAnimation = false;
+                            hitTimer = 0;
+                        }
+                    }
+                    if (_lastStand)
                     {
-                        DamageAnimation = false;
-                        hitTimer = 0;
+                        const string lastStandText = @"
+Player {0} you must strike back or die!
+";
+                        spriteBatch.DrawString(font, String.Format(lastStandText, _currentController), new Vector2(250.0f, 25.0f), Color.White, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
+                    }
+
+
+
+
+
+                }
+                else if (Stage == 3)
+                {
+                    if (debug > 0)
+                    {
+                        const string debugInfo = @"
+FPS: {0}
+Attack Direction: {2}
+Block Direction: {3}
+Timer: {4}
+P1 Health: {5}
+P2 Health: {6}
+New Attacker: {7}
+Attack Delay Timer: {8}
+Changed Attacker Ran: {9} times
+AttackTimerLimit:{10}
+_currentController: {1}
+Stage: {11}
+";
+                        spriteBatch.DrawString(font, String.Format(debugInfo, fps, _currentController, attackDirection, blockDirection, timer, _p1.health,
+                            _p2.health, newAttacker, attackDelayTimer, ChangedAttackerRan, attackTimerLimit, Stage
+                            ), new Vector2(5.0f, 0.0f), Color.White);
+                    }
+                    if (_victor != 0)
+                    {
+                        const string victoryText = @"
+Player {0} Wins!!
+";
+                        spriteBatch.DrawString(font, String.Format(victoryText, _victor), new Vector2(400.0f, 0.0f), Color.White, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
                     }
                 }
 
-
-
-
-
-            } else if (Stage == 3)
+            if(pause == 1)
             {
-
+                
+                    const string pauseInfo = @"
+Game is Paused
+";
+                    spriteBatch.DrawString(font, String.Format(pauseInfo), new Vector2(800.0f, 0.0f), Color.White, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
+                
             }
+
             for (var i = 0; i < _entities.Count; ++i)
             {
                 _entities[i].Draw(gameTime, spriteBatch);
             }
 
-        }
+            }
+        
     }
 }

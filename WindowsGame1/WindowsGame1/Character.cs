@@ -24,16 +24,16 @@ namespace repulse
 
         public override void Update(GameTime gameTime)
         {
-            if (StageChangePositionRan == false)
-            {
+            
                 _position = Position(_cha, Stage);
-            }
+            
             
             base.Update(gameTime);
         }
 
         public Vector2 Position(CharacterEnum cha, int _Stage)
         {
+            //updates the position of the characters on the choosing screen
             Vector2 pos = Vector2.Zero;
             if (_Stage == 1)
             {
@@ -57,13 +57,16 @@ namespace repulse
                     case CharacterEnum.Torbjorn:
                         pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 4 * 3 - _texture.Width / 2, _drawData.GraphicsDevice.Viewport.Height / 2);
                         break;
-
                 }
+                
             }
             else if (_Stage == 2)
             {
                 pos = new Vector2(1000,1000);
-                StageChangePositionRan = true;
+
+            } else if (_Stage == 3)
+            {
+                pos = new Vector2(1000, 1000);
             }
             return pos;
         }

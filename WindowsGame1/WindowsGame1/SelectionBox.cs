@@ -32,6 +32,7 @@ namespace repulse
 
         public Vector2 Position(int x, int y, int _Stage)
         {
+            //updates the position of the box
             Vector2 pos = Vector2.Zero;
             if (_Stage == 1)
             {
@@ -73,12 +74,16 @@ namespace repulse
             {
                 pos = new Vector2(1000, 1000);
                 StageChangePositionRan = true;
+            } else if (_Stage == 3)
+            {
+                pos = new Vector2(1000, 1000);
             }
             return pos;
         }
 
         public void limitingSelectionMovement()
         {
+            //if you try to go outside of the given options, it will reset it back
             if (y < 0)
             {
                 y = 0;

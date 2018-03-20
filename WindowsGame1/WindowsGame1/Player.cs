@@ -33,29 +33,19 @@ namespace repulse
 
         public override void Update(GameTime gameTime)
         {
-            
-            if (attacker == false)
-            {
-                if (health == 2) _texture = _drawData.LoadTexture(_assetName);
-                else if (health == 1) _texture = _drawData.LoadTexture(_assetNameHurt);
-                else if (health <= 0) _texture = _drawData.LoadTexture(_assetNameDead);
-
-                _adjustedPosition = _normalPosition;
-            }
-            else
-            {
-                _adjustedPosition = new Vector2(1000, 1000);
-                
-            }
-
+            checkHealth();
             _position = _adjustedPosition;
             base.Update(gameTime);
         }
 
         public Vector2 Position()
         {
-            Vector2 pos;
+            //sets the position
+            Vector2 pos = Vector2.Zero;
+           
+           
             pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 - _texture.Width / 2, _drawData.GraphicsDevice.Viewport.Height / 2 - _texture.Height / 2);
+           
             return pos;
         }
 
@@ -63,5 +53,48 @@ namespace repulse
        {
 
        }
+
+       public void checkHealth()
+       {
+
+    //changes health
+            if (Stage == 1)
+            {
+                _adjustedPosition = new Vector2(1000, 1000);
+            }
+            else if (Stage == 2)
+            {
+
+                if (attacker == false)
+                {
+                    if (health == 2) _texture = _drawData.LoadTexture(_assetName);
+                    else if (health == 1) _texture = _drawData.LoadTexture(_assetNameHurt);
+                    else if (health == 0) _texture = _drawData.LoadTexture(_assetNameHurt);
+                    else if (health <= -1) _texture = _drawData.LoadTexture(_assetNameDead);
+
+                    _adjustedPosition = _normalPosition;
+                }
+                else
+                {
+                    _adjustedPosition = new Vector2(1000, 1000);
+                }
+            }
+            else if (Stage == 3)
+            {
+                if (attacker == false)
+                {
+                    if (health == 2) _texture = _drawData.LoadTexture(_assetName);
+                    else if (health == 1) _texture = _drawData.LoadTexture(_assetNameHurt);
+                    else if (health == 0) _texture = _drawData.LoadTexture(_assetNameHurt);
+                    else if (health <= -1) _texture = _drawData.LoadTexture(_assetNameDead);
+
+                    _adjustedPosition = _normalPosition;
+                }
+                else
+                {
+                    _adjustedPosition = new Vector2(1000, 1000);
+                }
+            }
+        }
     }
 }

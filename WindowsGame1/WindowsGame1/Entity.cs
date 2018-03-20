@@ -29,7 +29,12 @@ namespace repulse
 
         public void StageUpdate()
         {
+            //changes the stage for all of the entity classes
             Stage++;
+            if (Stage > 3)
+            {
+                Stage = 1;
+            }
         }
         protected int Stage = 1;
         protected static int timer = 0;
