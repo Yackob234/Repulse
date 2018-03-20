@@ -271,6 +271,15 @@
       <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\torbjornDead.xnb</Output>
       <Time>2018-03-02T16:16:51.5508788-05:00</Time>
     </Item>
+    <Item>
+      <Source>mercy - Copy.png</Source>
+      <Name>selected</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\selected.xnb</Output>
+      <Time>2018-03-06T14:15:47.7666152-05:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <ContentProjectGUID>{BBF881CA-F176-42EC-BAED-9AEF96785AFB}</ContentProjectGUID>

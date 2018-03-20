@@ -40,19 +40,8 @@ namespace repulse
                     break;
 
             }
-            _pixelGenji = Keys.P;
-            _cuteGenji = Keys.C;
-            _evilGenji = Keys.E;
-            _reinhardt = Keys.R;
-            _torbjorn = Keys.T;
-            _mercy = Keys.M;
 
-            _keyState.Add(_pixelGenji, false);
-            _keyState.Add(_cuteGenji, false);
-            _keyState.Add(_evilGenji, false);
-            _keyState.Add(_reinhardt, false);
-            _keyState.Add(_torbjorn, false);
-            _keyState.Add(_mercy, false);
+            _keyState.Add(Keys.Enter, false);
             _keyState.Add(_upKey, false);
             _keyState.Add(_downKey, false);
             _keyState.Add(_leftKey, false);
@@ -67,14 +56,8 @@ namespace repulse
             SetState(newState, _downKey, DirectionEnum.Down);
             SetState(newState, _leftKey, DirectionEnum.Left);
             SetState(newState, _rightKey, DirectionEnum.Right);
-           
-            SetCharacterState(newState, _pixelGenji, CharacterEnum.PixelGenji);
-            SetCharacterState(newState, _cuteGenji, CharacterEnum.CuteGenji);
-            SetCharacterState(newState, _evilGenji, CharacterEnum.EvilGenji);
-            SetCharacterState(newState, _reinhardt, CharacterEnum.Reinhardt);
-            SetCharacterState(newState, _torbjorn, CharacterEnum.Torbjorn);
-            SetCharacterState(newState, _mercy, CharacterEnum.Mercy);
-            
+
+            SetActionState(newState, Keys.Enter, ActionEnum.Button1);
 
             base.Update(gameTime);
         }
@@ -89,13 +72,13 @@ namespace repulse
             }
         }
 
-        private void SetCharacterState(KeyboardState state, Keys key, CharacterEnum cha)
+        private void SetActionState(KeyboardState state, Keys key, ActionEnum act)
         {
             bool pressed = IsKeyPressed(state, key);
             if (_keyState[key] != pressed)
             {
                 _keyState[key] = pressed;
-                DoCharacter(cha, pressed);
+                DoAction(act, pressed);
             }
         }
 
@@ -103,12 +86,6 @@ namespace repulse
         {
             return current.IsKeyDown(keys);
         }
-        private Keys _pixelGenji;
-        private Keys _cuteGenji;
-        private Keys _evilGenji;
-        private Keys _mercy;
-        private Keys _reinhardt;
-        private Keys _torbjorn;
 
         private Keys _upKey;
         private Keys _downKey;

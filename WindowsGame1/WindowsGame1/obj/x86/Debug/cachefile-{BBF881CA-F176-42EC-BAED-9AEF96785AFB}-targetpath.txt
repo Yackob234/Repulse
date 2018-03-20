@@ -28,3 +28,4 @@ Content\reinhardtdeadead.xnb
 Content\torbjorn.xnb
 Content\torbjorndeaddead.xnb
 Content\torbjornDead.xnb
+Content\selected.xnb

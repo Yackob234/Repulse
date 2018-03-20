@@ -26,6 +26,12 @@ namespace repulse
             if (timer >= timerLimit) timer = 0;
 
         }
+
+        public void StageUpdate()
+        {
+            Stage++;
+        }
+        protected int Stage = 1;
         protected static int timer = 0;
         protected static int timerLimit = 500;
         protected Vector2 _position;

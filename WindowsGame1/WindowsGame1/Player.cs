@@ -57,6 +57,9 @@ namespace repulse
             return pos;
         }
 
-       
+       public void CharacterChoosing(Controller controller, CharacterEnum cha, bool pressed)
+       {
+
+       }
     }
 }

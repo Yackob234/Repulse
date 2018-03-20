@@ -12,23 +12,21 @@ namespace repulse
         public delegate void ControllerDirectionEvent(Controller controller, DirectionEnum dir, bool pressed);
         public event ControllerDirectionEvent Direction;
 
-        public delegate void ControllerCharacterEvent(Controller controller, CharacterEnum cha, bool pressed);
-        public event ControllerCharacterEvent Character;
+        public delegate void ControllerActionEvent(Controller controller, ActionEnum act, bool pressed);
+        public event ControllerActionEvent Action;
 
         public virtual void Update(GameTime gameTime)
         {
 
-        }
-
-       
+        }  
 
         protected void DoDirection(DirectionEnum dir, bool pressed)
         {
             Direction?.Invoke(this, dir, pressed);
         }    
-        protected void DoCharacter(CharacterEnum cha, bool pressed)
+        protected void DoAction(ActionEnum act, bool pressed)
         {
-            Character?.Invoke(this, cha, pressed);
+            Action?.Invoke(this, act, pressed);
         }
     }
 }
