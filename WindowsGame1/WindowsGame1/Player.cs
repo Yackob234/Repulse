@@ -17,6 +17,7 @@ namespace repulse
         private Vector2 _normalPosition;
         private Vector2 _adjustedPosition;
         public CharacterEnum _character;
+        private bool _characterChanged = false;
         
         public Player(EntityDrawData drawData, string assetName, string assetNameHurt, string assetNameDead, int Health, bool Attacker, CharacterEnum cha)
             : base(drawData, assetName)
@@ -49,10 +50,49 @@ namespace repulse
             return pos;
         }
 
-       public void CharacterChoosing(Controller controller, CharacterEnum cha, bool pressed)
+       public void CharacterChanging(CharacterEnum cha)
        {
-
-       }
+            //choosing stuff
+            switch (cha)
+            {
+                case CharacterEnum.CuteGenji:
+                    _assetName = "genji1";
+                    _assetNameHurt = "genji1Dead";
+                    _assetNameDead = "genji1deaddead";
+                    break;
+                case CharacterEnum.EvilGenji:
+                    _assetName = "genji2";
+                    _assetNameHurt = "genji2Dead";
+                    _assetNameDead = "genji2deaddead";
+                    break;
+                case CharacterEnum.PixelGenji:
+                    _assetName = "genji3";
+                    _assetNameHurt = "genji3Dead";
+                    _assetNameDead = "genji3deaddead";
+                    break;
+                case CharacterEnum.Reinhardt:
+                    _assetName = "reinhardt";
+                    _assetNameHurt = "reinhardtDead";
+                    _assetNameDead = "reinhardtdeaddead";
+                    break;
+                case CharacterEnum.Torbjorn:
+                    _assetName = "torbjorn";
+                    _assetNameHurt = "torbjornDead";
+                    _assetNameDead = "torbjorndeaddead";
+                    break;
+                case CharacterEnum.Mercy:
+                    _assetName = "mercy";
+                    _assetNameHurt = "mercyDead";
+                    _assetNameDead = "mercydeaddead";
+                    break;
+                default:
+                    _assetName = "mercy";
+                    _assetNameHurt = "mercyDead";
+                    _assetNameDead = "mercydeaddead";
+                    break;
+            }
+            _characterChanged = true;
+        }
 
        public void checkHealth()
        {
@@ -64,7 +104,7 @@ namespace repulse
             }
             else if (Stage == 2)
             {
-
+                
                 if (attacker == false)
                 {
                     if (health == 2) _texture = _drawData.LoadTexture(_assetName);
@@ -77,6 +117,11 @@ namespace repulse
                 else
                 {
                     _adjustedPosition = new Vector2(1000, 1000);
+                }
+                if (_characterChanged == true)
+                {
+                    _normalPosition = Position();
+                    _characterChanged = false;
                 }
             }
             else if (Stage == 3)

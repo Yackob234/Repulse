@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="ActionEnum.cs" />
     <Compile Include="Arrow.cs" />
+    <Compile Include="Background.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="CharacterEnum.cs" />
     <Compile Include="Controller.cs" />

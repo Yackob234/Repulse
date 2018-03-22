@@ -13,6 +13,7 @@ namespace repulse
         private Vector2 _speed;
         public DirectionEnum _direction;
         private CharacterEnum _cha;
+        private bool characterChanged = false;
 
         public Weapon(EntityDrawData drawData, DirectionEnum direction, string assetName, CharacterEnum cha)
             : base(drawData, assetName)
@@ -24,7 +25,103 @@ namespace repulse
 
         public override void Update(GameTime gameTime)
         {
+            if(characterChanged == true)
+            {
+                _texture = _drawData.LoadTexture(_assetName);
+                resetWeaponPosition(_direction);
+                characterChanged = false;
+            }
             base.Update(gameTime);
+        }
+
+        public void characterChanging(CharacterEnum cha, DirectionEnum dir)
+        {
+            
+            switch (cha)
+            {
+                case CharacterEnum.Mercy:
+                    switch (dir)
+                    {
+                        case DirectionEnum.Up:
+                            _assetName = "mercystaffU";
+                            break;
+                        case DirectionEnum.Down:
+                            _assetName = "mercystaffR";
+                            break;
+                        case DirectionEnum.Left:
+                            _assetName = "mercystaffL";
+                            break;
+                        case DirectionEnum.Right:
+                            _assetName = "mercystaffR";
+                            break;
+                        default:
+                            _assetName = null;
+                            break;
+                    }
+                    break;
+                case CharacterEnum.Reinhardt:
+                    switch (dir)
+                    {
+                        case DirectionEnum.Up:
+                            _assetName = "ReinHammerU";
+                            break;
+                        case DirectionEnum.Down:
+                            _assetName = "ReinHammerD";
+                            break;
+                        case DirectionEnum.Left:
+                            _assetName = "ReinHammerL";
+                            break;
+                        case DirectionEnum.Right:
+                            _assetName = "ReinHammerR";
+                            break;
+                        default:
+                            _assetName = null;
+                            break;
+                    }
+                    break;
+                case CharacterEnum.Torbjorn:
+                    switch (dir)
+                    {
+                        case DirectionEnum.Up:
+                            _assetName = "TorbHammerU";
+                            break;
+                        case DirectionEnum.Down:
+                            _assetName = "TorbHammerD";
+                            break;
+                        case DirectionEnum.Left:
+                            _assetName = "TorbHammerL";
+                            break;
+                        case DirectionEnum.Right:
+                            _assetName = "TorbHammerR";
+                            break;
+                        default:
+                            _assetName = null;
+                            break;
+                    }
+                    break;
+                default:
+                    switch (dir)
+                    {
+                        case DirectionEnum.Up:
+                            _assetName = "swordU";
+                            break;
+                        case DirectionEnum.Down:
+                            _assetName = "swordR";
+                            break;
+                        case DirectionEnum.Left:
+                            _assetName = "swordL";
+                            break;
+                        case DirectionEnum.Right:
+                            _assetName = "swordR";
+                            break;
+                        default:
+                            _assetName = null;
+                            break;
+                    }
+                    break;
+                                
+            }
+            characterChanged = true;
         }
 
         public void resetWeaponPosition(DirectionEnum dir)

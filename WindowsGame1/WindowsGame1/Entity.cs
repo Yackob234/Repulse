@@ -36,6 +36,13 @@ namespace repulse
                 Stage = 1;
             }
         }
+        /*
+        public void changeTextureSize(string assetName, int width, int height)
+        {
+            _texture.Height = height;
+            _texture.Width = width;
+        }
+        */
         protected int Stage = 1;
         protected static int timer = 0;
         protected static int timerLimit = 500;

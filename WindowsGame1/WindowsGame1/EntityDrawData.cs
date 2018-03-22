@@ -10,19 +10,18 @@ namespace repulse
 {
     public class EntityDrawData
     {
-        //public Texture2D genji1;
-        //public Texture2D genji1Dead;
+        /*
+        TODO: Add grey things for text - help
+        fix character swapping -
+        add bot mode - not started
+        background selector - not started
+        */
 
         //public Texture2D onArrowUp;
         //public Arrows offArrows = new Arrows(new Vector2(3,2));
         /*
         public List<Texture2D> onArrow = new List<Texture2D>();
         public List<Texture2D> genjis = new List<Texture2D>();
-        public Texture2D[] genji = new Texture2D[3];
-        public Texture2D[] onArrows = new Texture2D[4];
-        public Vector2[] onArrowPosition = new Vector2[4];
-        public Texture2D[] offArrows = new Texture2D[4];
-        public Vector2[] offArrowPosition = new Vector2[4];
         public Texture2D[] sword = new Texture2D[4];
         public Vector2[] swordPosition = new Vector2[4];
         public Vector2[] swordSpeed = new Vector2[4];
@@ -70,6 +69,7 @@ namespace repulse
         public int pause = -1;
         public int pauseDelay = 0;
         public int pauseDelayLimit = 25;
+        public Color fontColor = Color.Khaki;
 
         //private variables
         private GraphicsDevice graphicsDevice;
@@ -84,6 +84,7 @@ namespace repulse
         public Controller p1controller;
         public Controller p2controller;
         private SelectionBox chosen;
+        private Background bg;
 
         //lists
         private List<Controller> _controllers = new List<Controller>();
@@ -104,6 +105,11 @@ namespace repulse
             this.contentManager = contentManager;
             textures = new SortedList<string, Texture2D>();
             fonts = new SortedList<string, SpriteFont>();
+
+
+            bg = new Background(this, "background");
+            //_entities.Add(bg);
+
             font = LoadFont("SpriteFont_sml");
             
             p1controller = new KeyboardController(KeyboardController.KeyboardStyleEnum.WSAD);
@@ -112,7 +118,6 @@ namespace repulse
             _controllers.Add(p2controller);
 
             chosen = new SelectionBox(this, "selected");
-
             _entities.Add(chosen);
 
             AddCharacter(CharacterEnum.PixelGenji);
@@ -131,11 +136,6 @@ namespace repulse
             p1controller.Character += Controller_Character;
             p2controller.Character += Controller_Character;
             */
-
-
-
-            
-
         }
 
         private void Controller_Action(Controller controller, ActionEnum act, bool pressed)
@@ -159,7 +159,33 @@ namespace repulse
                         choiceTimer = 0;
                         p2Character = characterChoice;
                         
-                        if(initCompleted == false) mainGameDeclair();
+                        if (initCompleted == false) mainGameDeclair();
+                        else {
+                            if (_currentController == 2)
+                            {
+                                _p1.attacker = false;
+                                _p2.attacker = true;
+                            }
+                            else
+                            {
+                                _p1.attacker = true;
+                                _p2.attacker = false;
+                            }
+                            _p1.CharacterChanging(p1Character);
+                            _p2.CharacterChanging(p2Character);
+                            for (int i = 0; i < _weapons1.Count; i++)
+                            {
+                                DirectionEnum dir = DirectionEnum.Blank;
+                                if (i == 0) dir = DirectionEnum.Down;
+                                if (i == 1) dir = DirectionEnum.Up;
+                                if (i == 2) dir = DirectionEnum.Left;
+                                if (i == 3) dir = DirectionEnum.Right;
+
+                                _weapons1[dir].characterChanging(p1Character, dir);
+                                _weapons2[dir].characterChanging(p2Character, dir);
+                            }
+                        }
+                        
                         stageChange();
                         pauseDelay = 0;
                     }
@@ -309,7 +335,7 @@ namespace repulse
                         break;
                 }
 
-
+            
                 //Console.WriteLine(alive[chosenCharacter]);
                 
             
@@ -720,12 +746,14 @@ namespace repulse
         {
             stageChange();
             _victor = 0;
+            choiceTimer = 0;
             _p1.health = 2;
             _p2.health = 2;
             attackTimerLimit = 70;
-            _currentController = 1;
             xChoice = 0;
+            _currentController = 1;
             yChoice = 0;
+            
         }
 
 
@@ -899,8 +927,12 @@ namespace repulse
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             ++totalFrames;
+            for (var i = 0; i < _entities.Count; ++i)
+            {
+                _entities[i].Draw(gameTime, spriteBatch);
+            }
 
-                if (Stage == 1)
+            if (Stage == 1)
                 {   
                     if (debug > 0)
                     {
@@ -914,13 +946,15 @@ choiceTimer: {5}
 moveChoiceTimer: {6}
 Stage: {7}
 ";
-                        spriteBatch.DrawString(font, String.Format(debugInfo, fps, _currentController, chosen.x, chosen.y, characterChoice, choiceTimer, moveChoiceTimer, Stage), new Vector2(5.0f, 0.0f), Color.White);
+                        Vector2 _pos = new Vector2(5.0f, 0.0f);
+                        spriteBatch.DrawString(font, String.Format(debugInfo, fps, _currentController, chosen.x, chosen.y, characterChoice, choiceTimer, moveChoiceTimer, Stage), new Vector2(5.0f, 0.0f), fontColor);
+                    
                     }
 
                     const string instructions = @"
 Player {0}: please choose a Character
 ";
-                    spriteBatch.DrawString(font, String.Format(instructions, _currentController), new Vector2(350, 0.0f), Color.White, 0, Vector2.Zero, 1.25f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(font, String.Format(instructions, _currentController), new Vector2(350, 0.0f), fontColor, 0, Vector2.Zero, 1.25f, SpriteEffects.None, 0);
                 }
                 else if (Stage == 2)
                 {
@@ -944,7 +978,7 @@ Stage: {13}
 ";
                         spriteBatch.DrawString(font, String.Format(debugInfo, fps, _p1.attacker, attackDirection, blockDirection, timer, _p1.health,
                             _p2.health, newAttacker, attackDelayTimer, ChangedAttackerRan, _p2.attacker, attackTimerLimit, _currentController, Stage
-                            ), new Vector2(5.0f, 0.0f), Color.White);
+                            ), new Vector2(5.0f, 0.0f), fontColor);
                     }
 
                     if (BlockAnimation)
@@ -953,7 +987,7 @@ Stage: {13}
                         const string blockText = @"
 Block!!
 ";
-                        spriteBatch.DrawString(font, String.Format(blockText, _currentController), new Vector2(445.0f, 50.0f), Color.White, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(font, String.Format(blockText, _currentController), new Vector2(445.0f, 50.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
                         if (hitTimer > 50)
                         {
                             BlockAnimation = false;
@@ -966,7 +1000,7 @@ Block!!
                         const string damageText = @"
 Hit!!
 ";
-                        spriteBatch.DrawString(font, String.Format(damageText, _currentController), new Vector2(450.0f, 50.0f), Color.White, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(font, String.Format(damageText, _currentController), new Vector2(450.0f, 50.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
                         if (hitTimer > 50)
                         {
                             DamageAnimation = false;
@@ -978,7 +1012,7 @@ Hit!!
                         const string lastStandText = @"
 Player {0} you must strike back or die!
 ";
-                        spriteBatch.DrawString(font, String.Format(lastStandText, _currentController), new Vector2(250.0f, 25.0f), Color.White, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(font, String.Format(lastStandText, _currentController), new Vector2(250.0f, 25.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
                     }
 
 
@@ -1006,14 +1040,14 @@ Stage: {11}
 ";
                         spriteBatch.DrawString(font, String.Format(debugInfo, fps, _currentController, attackDirection, blockDirection, timer, _p1.health,
                             _p2.health, newAttacker, attackDelayTimer, ChangedAttackerRan, attackTimerLimit, Stage
-                            ), new Vector2(5.0f, 0.0f), Color.White);
+                            ), new Vector2(5.0f, 0.0f), fontColor);
                     }
                     if (_victor != 0)
                     {
                         const string victoryText = @"
 Player {0} Wins!!
 ";
-                        spriteBatch.DrawString(font, String.Format(victoryText, _victor), new Vector2(400.0f, 0.0f), Color.White, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(font, String.Format(victoryText, _victor), new Vector2(400.0f, 0.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
                     }
                 }
 
@@ -1023,14 +1057,11 @@ Player {0} Wins!!
                     const string pauseInfo = @"
 Game is Paused
 ";
-                    spriteBatch.DrawString(font, String.Format(pauseInfo), new Vector2(800.0f, 0.0f), Color.White, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(font, String.Format(pauseInfo), new Vector2(800.0f, 0.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
                 
             }
 
-            for (var i = 0; i < _entities.Count; ++i)
-            {
-                _entities[i].Draw(gameTime, spriteBatch);
-            }
+            
 
             }
         
