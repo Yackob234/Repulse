@@ -11,21 +11,21 @@ namespace repulse
     public class EntityDrawData
     {
         /*
-        TODO: Add grey things for text - help
-        fix character swapping -
-        add bot mode - not started
-        background selector - not started
+        TODO: Add grey things for text - help SHADOW
+        add bot mode - started
+        background selector - help/effort SCALE
+        add skip for intructions
+        
+        
+        
+        Questions: can i changed texture sizes mid game
+        .gitignore??
+        how to do the grey highlight thing for text - can i get the text space?
         */
 
-        //public Texture2D onArrowUp;
-        //public Arrows offArrows = new Arrows(new Vector2(3,2));
-        /*
-        public List<Texture2D> onArrow = new List<Texture2D>();
-        public List<Texture2D> genjis = new List<Texture2D>();
-        public Texture2D[] sword = new Texture2D[4];
-        public Vector2[] swordPosition = new Vector2[4];
-        public Vector2[] swordSpeed = new Vector2[4];
-        */
+        
+        
+        //public Vector2[] swordSpeed = new Vector2[4];
         //int[] array = new int[] { 1, 2, 3 };
 
             //the rest of variables
@@ -53,7 +53,9 @@ namespace repulse
         public string[] Dead = new string[2];
         public string[] deaddead = new string[2];
         public SpriteFont font;
-        public int Stage = 1;
+        //represents the stage in which the game in is (selections screens playings, ending screens)
+        public StageEnum Stage = StageEnum.GamemodeSelect;
+        public int gameMode = 0;
         public int xChoice = 0;
         public int yChoice = 0;
         public bool BlockAnimation;
@@ -69,6 +71,8 @@ namespace repulse
         public int pause = -1;
         public int pauseDelay = 0;
         public int pauseDelayLimit = 25;
+        public int informationTimer = 0;
+        public int informationTimerLimit = 250;
         public Color fontColor = Color.Khaki;
 
         //private variables
@@ -85,6 +89,8 @@ namespace repulse
         public Controller p2controller;
         private SelectionBox chosen;
         private Background bg;
+        private Gamemode twoPlayers;
+        private Gamemode onePlayer;
 
         //lists
         private List<Controller> _controllers = new List<Controller>();
@@ -93,6 +99,7 @@ namespace repulse
         private Dictionary<DirectionEnum, Weapon> _weapons1 = new Dictionary<DirectionEnum, Weapon>();
         private Dictionary<DirectionEnum, Weapon> _weapons2 = new Dictionary<DirectionEnum, Weapon>();
         private Dictionary<CharacterEnum, Character> _characters = new Dictionary<CharacterEnum, Character>();
+        private Dictionary<int, Background> _bgs = new Dictionary<int, Background>();
         SortedList<string, Texture2D> textures;
 
         private int _currentController = 1;
@@ -106,9 +113,15 @@ namespace repulse
             textures = new SortedList<string, Texture2D>();
             fonts = new SortedList<string, SpriteFont>();
 
+            for(int i = 1; i < 7; i++)
+            {
+                LoadBackgrounds(i);
+            }
 
-            bg = new Background(this, "background");
-            //_entities.Add(bg);
+            onePlayer = new Gamemode(this, "onePlayer", 2);
+            twoPlayers = new Gamemode(this, "twoPlayers", 1);
+            _entities.Add(onePlayer);
+            _entities.Add(twoPlayers);
 
             font = LoadFont("SpriteFont_sml");
             
@@ -141,7 +154,25 @@ namespace repulse
         private void Controller_Action(Controller controller, ActionEnum act, bool pressed)
         {
             //takes actions of the enter key
-            if (Stage == 1)
+            if(Stage == StageEnum.GamemodeSelect)
+            {
+                if(choiceTimer >= choiceTimerLimit)
+                {
+                    playerGamemodeChoice();
+                    stageChange();
+                    choiceTimer = 0;
+                }
+                
+            } else if (Stage == StageEnum.BackgroundSelect)
+            {
+                if (choiceTimer >= choiceTimerLimit)
+                {
+                    playerBackgroundChoice();
+                    choiceTimer = 0;
+                    stageChange();
+                }
+                    
+            } else if (Stage == StageEnum.CharacterSelect)
             {
                 if (_controllers.IndexOf(controller) == _currentController - 1 && choiceTimer >= choiceTimerLimit)
                 {
@@ -159,7 +190,7 @@ namespace repulse
                         choiceTimer = 0;
                         p2Character = characterChoice;
                         
-                        if (initCompleted == false) mainGameDeclair();
+                        if (initCompleted == false) stage2Declair();
                         else {
                             if (_currentController == 2)
                             {
@@ -196,20 +227,60 @@ namespace repulse
                 {
 
                 }
-            } else if (Stage == 2)
+            } else if (Stage == StageEnum.MainGameplay)
             {
                 
-            } else if (Stage == 3)
+            } else if (Stage == StageEnum.EndScreen)
             {
                 resetGame();
             }
         }
         private void Controller_Direction(Controller controller, DirectionEnum dir, bool pressed)
         {
+            //takes directional inputs
+
             //if you cannot attack return
-            if (Stage == 1 && moveChoiceTimer >= moveChoiceTimerLimit)
+            if (Stage == StageEnum.GamemodeSelect && moveChoiceTimer >= moveChoiceTimerLimit)
             {
-                if (_controllers.IndexOf(controller) == _currentController - 1)
+                switch (dir)
+                {
+                    case DirectionEnum.Up:
+                        chosen.y--;
+                        break;
+                    case DirectionEnum.Down:
+                        chosen.y++;
+                        break;
+                    case DirectionEnum.Left:
+                        chosen.x--;
+                        break;
+                    case DirectionEnum.Right:
+                        chosen.x++;
+                        break;
+                }
+                moveChoiceTimer = 0;
+            }
+            else if (Stage == StageEnum.BackgroundSelect && moveChoiceTimer >= moveChoiceTimerLimit)
+            {
+                switch (dir)
+                {
+                    case DirectionEnum.Up:
+                        chosen.y--;
+                        break;
+                    case DirectionEnum.Down:
+                        chosen.y++;
+                        break;
+                    case DirectionEnum.Left:
+                        chosen.x--;
+                        break;
+                    case DirectionEnum.Right:
+                        chosen.x++;
+                        break;
+                }
+                moveChoiceTimer = 0;
+            }
+            else if (Stage == StageEnum.CharacterSelect)
+            {
+                if (_controllers.IndexOf(controller) == _currentController - 1 && moveChoiceTimer >= moveChoiceTimerLimit)
                 {
 
                     // attacker
@@ -237,7 +308,7 @@ namespace repulse
                 }
                 
             }
-            else if (Stage == 2)
+            else if (Stage == StageEnum.MainGameplay)
             {
                 if (_controllers.IndexOf(controller) == _currentController - 1 && newAttacker == false && attackDirection == DirectionEnum.Blank)
                 {
@@ -258,7 +329,6 @@ namespace repulse
                 }
             }
         }
-
         
         public void precharacter()
         {
@@ -282,7 +352,41 @@ namespace repulse
 
         }
 
+        public void LoadBackgrounds(int position)
+        {
+           //loads the different possible backgrounds
+            
+            string texture;
 
+            switch (position)
+            {
+                case 1:
+                    texture = "background1";
+                    break;
+                case 2:
+                    texture = "background2";
+                    break;
+                case 3:
+                    texture = "onArrowL";
+                    break;
+                case 4:
+                    texture = "onArrowR";
+                    break;
+                case 5:
+                    texture = "onArrowR";
+                    break;
+                case 6:
+                    texture = "onArrowR";
+                    break;
+                default:
+                    texture = null;
+                    break;
+            }
+
+            var bg = new Background(this, texture, position, false);
+            _bgs.Add(position, bg);
+            AddEntity(bg);
+        }
 
         private void Controller_Character(CharacterEnum cha, bool pressed, int chosenCharacter)
         {
@@ -520,6 +624,7 @@ namespace repulse
         }
         public Texture2D LoadTexture(string assetName)
         {
+            //loads textures xd rwar
             Texture2D texture;
             if (textures.TryGetValue(assetName, out texture))
                 return texture;
@@ -530,6 +635,7 @@ namespace repulse
 
         public SpriteFont LoadFont(string assetName)
         {
+            //loads specific fonts
             SpriteFont font;
             if (fonts.TryGetValue(assetName, out font))
                 return font;
@@ -550,6 +656,7 @@ namespace repulse
 
         public void pauseGame()
         {
+            //pauses the game
             if (pauseDelay > pauseDelayLimit)
             {
 
@@ -580,13 +687,13 @@ namespace repulse
                     {
                         _p2.health++;
                     }
-                    attackTimerLimit += 10;
                     _lastStand = false;
                 }
 
                 DamageAnimation = true;
 
-            } else if (blockDirection == attackDirection && blockDirection != DirectionEnum.Blank)
+            }
+            else if (blockDirection == attackDirection && blockDirection != DirectionEnum.Blank)
             {
                 if (_lastStand)
                 {
@@ -734,6 +841,7 @@ namespace repulse
 
         public void lastStand(int dyingPlayer)
         {
+            //activates the last stand for a player
             _lastStand = true;
 
             if (_initLastStand == true) _initLastStand = false;
@@ -744,6 +852,7 @@ namespace repulse
 
         public void resetGame()
         {
+            //resets the game after finishing
             stageChange();
             _victor = 0;
             choiceTimer = 0;
@@ -758,7 +867,7 @@ namespace repulse
 
 
 
-        public void mainGameDeclair()
+        public void stage2Declair()
         {
             //declairs the main game after the character choosing has finished
             _p1 = new Player(this, alive[0], Dead[0], deaddead[0], 2, false, p1Character);
@@ -807,23 +916,89 @@ namespace repulse
 
         public void stageChange()
         {
-            Stage++;
-            for (var i = 0; i < _entities.Count; i++)
-            {
-                _entities[i].StageUpdate();
+            //changes the stage
+            switch (Stage){
+                case StageEnum.GamemodeSelect:
+                Stage = StageEnum.PlayerInformationScreen;
+                    break;
+                case StageEnum.PlayerInformationScreen:
+                    Stage = StageEnum.BackgroundSelect;
+                    break;
+                case StageEnum.BackgroundSelect:
+                    Stage = StageEnum.CharacterSelect;
+                    break;
+                case StageEnum.CharacterSelect:
+                    Stage = StageEnum.MainGameplay;
+                    break;
+                case StageEnum.MainGameplay:
+                    Stage = StageEnum.EndScreen;
+                    break;
+                case StageEnum.EndScreen:
+                    Stage = StageEnum.BackgroundSelect;
+                    break;
             }
-            if(Stage == 4)
-            {
-                Stage = 1;
-            }
+            
             //hi
+            //hey whatcha doing
+        }
+
+        public void playerGamemodeChoice()
+        {
+            //picks the gamemode
+            if (chosen.x == 0)
+            {
+                gameMode = 1;
+            }
+            else if (chosen.x == 1)
+            {
+                gameMode = 2;
+            }
+
+        }
+
+        public void playerBackgroundChoice()
+        {
+            //picks the background
+            if (chosen.x == 0)
+            {
+                if (chosen.y == 0)
+                {
+                    _bgs[1].chosen = true;
+
+                }
+                else if (chosen.y == 1)
+                {
+                    _bgs[4].chosen = true; 
+                }
+            }
+            else if (chosen.x == 1)
+            {
+                if (chosen.y == 0)
+                {
+                    _bgs[2].chosen = true;
+                }
+                else if (chosen.y == 1)
+                {
+                    _bgs[5].chosen = true;
+                }
+            }
+            else if (chosen.x == 2)
+            {
+                if (chosen.y == 0)
+                {
+                    _bgs[3].chosen = true;
+                }
+                else if (chosen.y == 1)
+                {
+                    _bgs[6].chosen = true;
+                }
+            }
         }
 
         public void playersCharacterChoice()
         {
             //converts selection box coorditate to a CharacterEnum
-            if (moveChoiceTimer >= moveChoiceTimerLimit)
-            {
+            
                 if (chosen.x == 0)
                 {
                     if (chosen.y == 0)
@@ -857,7 +1032,7 @@ namespace repulse
                         characterChoice = CharacterEnum.Torbjorn;
                     }
                 }
-            }
+            
         }
 
         public void Update(GameTime gameTime)
@@ -867,55 +1042,73 @@ namespace repulse
             elapsedTime += gameTime.ElapsedGameTime.TotalMilliseconds;
             if (pause == -1)
             {
-                
-                if (Stage == 1)
+                if (Stage == StageEnum.GamemodeSelect)
                 {
                     choiceTimer++;
                     moveChoiceTimer++;
-                    playersCharacterChoice();
                 }
-                else if (Stage == 2)
+                else if (Stage == StageEnum.PlayerInformationScreen)
                 {
-
-                    // CharacterChoice.Update(gameTime);
-                    timer++;
-                    newAttackerDelay();
-                    if (_victor != 0)
+                    informationTimer++;
+                    if (informationTimer >= informationTimerLimit)
                     {
-
+                        informationTimer = 0;
                         stageChange();
                     }
-                    if (attack == true)
-                    {
-                        AttackAnimation(gameTime);
-                    }
-                    if (timer > timerLimit)
-                    {
-                        timer = 0;
-                        ChangeAttacker();
-                    }
-
                 }
-                else if (Stage == 3)
+                if (gameMode  == 1)
                 {
+                    
+                    if (Stage == StageEnum.BackgroundSelect)
+                    {
+                        choiceTimer++;
+                        moveChoiceTimer++;
+                    }
+                    else if (Stage == StageEnum.CharacterSelect)
+                    {
+                        choiceTimer++;
+                        moveChoiceTimer++;
+                        playersCharacterChoice();
+                    }
+                    else if (Stage == StageEnum.MainGameplay)
+                    {
 
+                        // CharacterChoice.Update(gameTime);
+                        timer++;
+                        newAttackerDelay();
+                        if (_victor != 0)
+                        {
+
+                            stageChange();
+                        }
+                        if (attack == true)
+                        {
+                            AttackAnimation(gameTime);
+                        }
+                        if (timer > timerLimit)
+                        {
+                            timer = 0;
+                            ChangeAttacker();
+                        }
+
+                    }
+                    else if (Stage == StageEnum.EndScreen)
+                    {
+
+                    }
+                    if (_currentController >= 3)
+                        _currentController = 1;
                 }
-                else
+                for (var i = 0; i < _controllers.Count; ++i)
                 {
-                    Stage = 1;
+                    _controllers[i].Update(gameTime);
                 }
                 for (var i = 0; i < _entities.Count; ++i)
                 {
                     _entities[i].Update(gameTime);
                 }
-                
-                for (var i = 0; i < _controllers.Count; ++i)
-                {
-                    _controllers[i].Update(gameTime);
-                }
-                if (_currentController >= 3)
-                    _currentController = 1;
             }
+            
             if (elapsedTime >= 1000.0f)
             {
                 fps = totalFrames;
@@ -927,13 +1120,81 @@ namespace repulse
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             ++totalFrames;
+            
             for (var i = 0; i < _entities.Count; ++i)
             {
                 _entities[i].Draw(gameTime, spriteBatch);
             }
 
-            if (Stage == 1)
-                {   
+            if (Stage == StageEnum.GamemodeSelect)
+            {
+                if (debug > 0)
+                {
+                    const string debugInfo = @"
+FPS: {0}
+_currentController: {1}
+chosen.x: {2}
+chosen.y: {3}
+choiceTimer: {4}
+moveChoiceTimer: {5}
+Stage: {6}
+";
+                    spriteBatch.DrawString(font, String.Format(debugInfo, fps, _currentController, chosen.x, chosen.y, choiceTimer, moveChoiceTimer, Stage), new Vector2(5.0f, 0.0f), fontColor);
+
+                }
+
+                const string startingScreen = @"
+Hey! Welcome to Repulse! A Game about having good reaction times!
+Now, Please select a gamemode using WASD or Arrow Keys, and hit ENTER to start!
+Keep in mind, if you choose two player, player 1 is WASD and 2 is Arrows!
+";
+                spriteBatch.DrawString(font, String.Format(startingScreen), new Vector2(250.0f, 0.0f), fontColor);
+
+                const string startingScreen1 = @"
+VS a Friend
+";
+                spriteBatch.DrawString(font, String.Format(startingScreen1), new Vector2(200.0f, 125.0f), fontColor);
+
+                const string startingScreen2 = @"
+Agaisnt an Bot
+";
+                spriteBatch.DrawString(font, String.Format(startingScreen2), new Vector2(650.0f, 125.0f), fontColor);
+
+            }
+
+            else if (Stage == StageEnum.PlayerInformationScreen)
+            {
+                if (gameMode == 1)
+                {
+                    const string startingScreenp21 = @"
+You have chosen two player.
+Player 1's controls are WASD and ENTER,
+Player 2's controls are Arrow Keys and ENTER.
+";
+                    spriteBatch.DrawString(font, String.Format(startingScreenp21, p1controller, p2controller), new Vector2(350.0f, 0.0f), fontColor);
+
+                }
+                else if (gameMode == 2)
+                {
+                    const string startingScreenp22 = @"
+You have chosen to play against a bot,
+You cannot win this mode, 
+There is only defending,
+And training reaction time.
+";
+                    spriteBatch.DrawString(font, String.Format(startingScreenp22, p1controller, p2controller), new Vector2(350.0f, 0.0f), fontColor);
+
+                }
+            }
+
+            if (gameMode == 1)
+            {
+                if (Stage == StageEnum.BackgroundSelect)
+                {
+
+                }
+                else if (Stage == StageEnum.CharacterSelect)
+                {
                     if (debug > 0)
                     {
                         const string debugInfo = @"
@@ -948,7 +1209,7 @@ Stage: {7}
 ";
                         Vector2 _pos = new Vector2(5.0f, 0.0f);
                         spriteBatch.DrawString(font, String.Format(debugInfo, fps, _currentController, chosen.x, chosen.y, characterChoice, choiceTimer, moveChoiceTimer, Stage), new Vector2(5.0f, 0.0f), fontColor);
-                    
+
                     }
 
                     const string instructions = @"
@@ -956,7 +1217,7 @@ Player {0}: please choose a Character
 ";
                     spriteBatch.DrawString(font, String.Format(instructions, _currentController), new Vector2(350, 0.0f), fontColor, 0, Vector2.Zero, 1.25f, SpriteEffects.None, 0);
                 }
-                else if (Stage == 2)
+                else if (Stage == StageEnum.MainGameplay)
                 {
                     if (debug > 0)
                     {
@@ -1020,7 +1281,7 @@ Player {0} you must strike back or die!
 
 
                 }
-                else if (Stage == 3)
+                else if (Stage == StageEnum.EndScreen)
                 {
                     if (debug > 0)
                     {
@@ -1050,6 +1311,8 @@ Player {0} Wins!!
                         spriteBatch.DrawString(font, String.Format(victoryText, _victor), new Vector2(400.0f, 0.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
                     }
                 }
+            }
+            
 
             if(pause == 1)
             {

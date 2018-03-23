@@ -11,24 +11,6 @@
       <Time>2018-02-26T12:58:29.332212-05:00</Time>
     </Item>
     <Item>
-      <Source>onArrow.png</Source>
-      <Name>onArrowU</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowU.xnb</Output>
-      <Time>2018-02-27T13:52:52.8966105-05:00</Time>
-    </Item>
-    <Item>
-      <Source>offArrow.png</Source>
-      <Name>offArrowU</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowU.xnb</Output>
-      <Time>2018-02-27T13:51:34.9003199-05:00</Time>
-    </Item>
-    <Item>
       <Source>genji1deaddead.png</Source>
       <Name>genji1deaddead</Name>
       <Importer>TextureImporter</Importer>
@@ -71,7 +53,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowD.xnb</Output>
-      <Time>2018-02-27T13:52:03.7380341-05:00</Time>
+      <Time>2018-03-23T11:46:52.3685593-04:00</Time>
     </Item>
     <Item>
       <Source>offArrowL.png</Source>
@@ -80,7 +62,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowL.xnb</Output>
-      <Time>2018-02-27T14:00:26.8450204-05:00</Time>
+      <Time>2018-03-22T14:18:39.0538626-04:00</Time>
     </Item>
     <Item>
       <Source>onArrowD.png</Source>
@@ -89,7 +71,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowD.xnb</Output>
-      <Time>2018-02-27T13:52:37.7171859-05:00</Time>
+      <Time>2018-03-23T11:53:05.7021421-04:00</Time>
     </Item>
     <Item>
       <Source>onArrowL.png</Source>
@@ -98,7 +80,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowL.xnb</Output>
-      <Time>2018-02-27T13:52:31.6938056-05:00</Time>
+      <Time>2018-03-23T11:46:32.8121155-04:00</Time>
     </Item>
     <Item>
       <Source>offArrowR.png</Source>
@@ -107,7 +89,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowR.xnb</Output>
-      <Time>2018-02-27T14:00:25.9421787-05:00</Time>
+      <Time>2018-03-22T14:19:00.7819175-04:00</Time>
     </Item>
     <Item>
       <Source>onArrowR.png</Source>
@@ -116,7 +98,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowR.xnb</Output>
-      <Time>2018-02-27T13:53:37.5052092-05:00</Time>
+      <Time>2018-03-23T11:47:27.1532147-04:00</Time>
     </Item>
     <Item>
       <Source>genji1.png</Source>
@@ -378,6 +360,60 @@
       <Options>None</Options>
       <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\SpriteFont_sml.xnb</Output>
       <Time>2018-02-23T17:10:55.0076591-05:00</Time>
+    </Item>
+    <Item>
+      <Source>offArrowU.png</Source>
+      <Name>offArrowU</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\offArrowU.xnb</Output>
+      <Time>2018-03-22T14:19:25.3200232-04:00</Time>
+    </Item>
+    <Item>
+      <Source>onArrowU.png</Source>
+      <Name>onArrowU</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onArrowU.xnb</Output>
+      <Time>2018-03-23T11:53:07.3829465-04:00</Time>
+    </Item>
+    <Item>
+      <Source>onePlayer.png</Source>
+      <Name>onePlayer</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\onePlayer.xnb</Output>
+      <Time>2018-03-23T12:47:15.8697354-04:00</Time>
+    </Item>
+    <Item>
+      <Source>twoPlayers.png</Source>
+      <Name>twoPlayers</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\twoPlayers.xnb</Output>
+      <Time>2018-03-23T12:48:39.7407426-04:00</Time>
+    </Item>
+    <Item>
+      <Source>background1.png</Source>
+      <Name>background1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\background1.xnb</Output>
+      <Time>2018-03-23T16:41:47.2517598-04:00</Time>
+    </Item>
+    <Item>
+      <Source>background2.png</Source>
+      <Name>background2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\background2.xnb</Output>
+      <Time>2018-03-23T16:49:08.8732781-04:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

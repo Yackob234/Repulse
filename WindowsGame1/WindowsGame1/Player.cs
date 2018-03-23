@@ -43,8 +43,8 @@ namespace repulse
         {
             //sets the position
             Vector2 pos = Vector2.Zero;
-           
-           
+
+            
             pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 - _texture.Width / 2, _drawData.GraphicsDevice.Viewport.Height / 2 - _texture.Height / 2);
            
             return pos;
@@ -96,15 +96,9 @@ namespace repulse
 
        public void checkHealth()
        {
-
-    //changes health
-            if (Stage == 1)
+            //changes health
+            if (_drawData.Stage == StageEnum.MainGameplay)
             {
-                _adjustedPosition = new Vector2(1000, 1000);
-            }
-            else if (Stage == 2)
-            {
-                
                 if (attacker == false)
                 {
                     if (health == 2) _texture = _drawData.LoadTexture(_assetName);
@@ -124,7 +118,8 @@ namespace repulse
                     _characterChanged = false;
                 }
             }
-            else if (Stage == 3)
+
+            else if (_drawData.Stage == StageEnum.EndScreen)
             {
                 if (attacker == false)
                 {
@@ -139,6 +134,10 @@ namespace repulse
                 {
                     _adjustedPosition = new Vector2(1000, 1000);
                 }
+            }
+            else
+            {
+                _adjustedPosition = new Vector2(1000, 1000);
             }
         }
     }

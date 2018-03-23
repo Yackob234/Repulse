@@ -23,7 +23,7 @@ namespace repulse
         {
             //finds the position for the arrow sprites
             Vector2 position = new Vector2(1000, 1000);
-            if (Stage == 2) { 
+            if (_drawData.Stage == StageEnum.MainGameplay) { 
                 switch (direction)
                 {
                     case DirectionEnum.Up:
@@ -39,7 +39,11 @@ namespace repulse
                         position = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 + _texture.Width / 2 - _texture.Width * 2, _drawData.GraphicsDevice.Viewport.Height / 2 + _texture.Height / 2);
                         break;
                 }
-            } 
+            }
+            else
+            {
+                position = new Vector2(1000, 1000);
+            }
             return position;
         }
 

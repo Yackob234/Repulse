@@ -1,6 +1,4 @@
 Content\genji1dead.xnb
-Content\onArrowU.xnb
-Content\offArrowU.xnb
 Content\genji1deaddead.xnb
 Content\swordL.xnb
 Content\swordR.xnb
@@ -40,4 +38,9 @@ Content\TorbHammerU.xnb
 Content\ReinHammerL.xnb
 Content\ReinHammerU.xnb
 Content\SpriteFont_sml.xnb
-Content\background.xnb
+Content\offArrowU.xnb
+Content\onArrowU.xnb
+Content\onePlayer.xnb
+Content\twoPlayers.xnb
+Content\background1.xnb
+Content\background2.xnb
