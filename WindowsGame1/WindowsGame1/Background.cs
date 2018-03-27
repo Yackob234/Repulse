@@ -35,33 +35,40 @@ namespace repulse
         public Vector2 Position()
         {
             Vector2 pos = Vector2.Zero;
+            float factor;
             if(_drawData.Stage == StageEnum.BackgroundSelect)
             {
                 switch (_number)
                 {
                     case 1:
-                        pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 5 - _texture.Width / 40 * 3, _drawData.GraphicsDevice.Viewport.Height / 2 - _texture.Height / 20 * 3);
+                        factor = 0.15f;
+                        pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 5 - _texture.Width * factor / 2, _drawData.GraphicsDevice.Viewport.Height / 2 - _texture.Height * factor);
                         _scale = 0.15f;
                         break;
                     case 2:
-                        pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 - _texture.Width / 40 * 3, _drawData.GraphicsDevice.Viewport.Height / 2 - _texture.Height / 20 * 3);
-                        _scale = 0.15f;
+                        factor = 0.16f;
+                        pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 - _texture.Width * factor / 2, _drawData.GraphicsDevice.Viewport.Height / 2 - _texture.Height * factor);
+                        _scale = factor;
                         break;
                     case 3:
-                        pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 5 * 4 - _texture.Width / 40 * 3, _drawData.GraphicsDevice.Viewport.Height / 2 - _texture.Height / 20 * 3);
-                        _scale = 0.15f;
+                        factor = 0.23f;
+                        pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 5 * 4 - _texture.Width * factor / 2, _drawData.GraphicsDevice.Viewport.Height / 2 - _texture.Height * factor);
+                        _scale = factor;
                         break;
                     case 4:
-                        pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 4 - _texture.Width / 40 * 3, _drawData.GraphicsDevice.Viewport.Height / 2);
-                        _scale = 0.15f;
+                        factor = 0.15f;
+                        pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 5 - _texture.Width * factor / 2, _drawData.GraphicsDevice.Viewport.Height / 2);
+                        _scale = factor;
                         break;
                     case 5:
-                        pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 - _texture.Width / 40 * 3, _drawData.GraphicsDevice.Viewport.Height / 2);
-                        _scale = 0.15f;
+                        factor = 0.3f;
+                        pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 2 - _texture.Width * factor / 2, _drawData.GraphicsDevice.Viewport.Height / 2);
+                        _scale = factor;
                         break;
                     case 6:
-                        pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 4 * 3 - _texture.Width / 40 * 3, _drawData.GraphicsDevice.Viewport.Height / 2);
-                        _scale = 0.15f;
+                        factor = 0.23f;
+                        pos = new Vector2(_drawData.GraphicsDevice.Viewport.Width / 5 * 4 - _texture.Width * factor / 2, _drawData.GraphicsDevice.Viewport.Height / 2);
+                        _scale = factor;
                         break;
                 }
             }
@@ -114,16 +121,16 @@ namespace repulse
                         //needs adjustin
                         break;
                     case 3:
-                        _scale = 0.15f;
+                        _scale = 0.79f;
                         break;
                     case 4:
-                        _scale = 0.15f;
+                        _scale = 0.53f;
                         break;
                     case 5:
-                        _scale = 0.15f;
+                        _scale = 0.98f;
                         break;
                     case 6:
-                        _scale = 0.15f;
+                        _scale = 0.84f;
                         break;
                 }
                 _position = Position();
