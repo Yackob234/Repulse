@@ -76,9 +76,9 @@
     <Compile Include="Arrow.cs" />
     <Compile Include="Background.cs" />
     <Compile Include="Character.cs" />
-    <Compile Include="CharacterEnum.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="ControllerEntity.cs" />
+    <Compile Include="ControllerIcon.cs" />
     <Compile Include="DirectionEnum.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="EntityDrawData.cs" />
@@ -88,6 +88,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="PS3Controller.cs" />
     <Compile Include="SelectionBox.cs" />
     <Compile Include="StageEnum.cs" />
     <Compile Include="Sword.cs" />

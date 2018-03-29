@@ -11,16 +11,17 @@ namespace repulse
     {
         public enum KeyboardStyleEnum
         {
-            WSAD,
+            WASD,
             IJKL,
-            Arrow
+            Arrow,
+            NumPad
         }
 
         public KeyboardController(KeyboardStyleEnum style)
         {
             switch (style)
             {
-                case KeyboardStyleEnum.WSAD:
+                case KeyboardStyleEnum.WASD:
                     _upKey = Keys.W;
                     _downKey = Keys.S;
                     _leftKey = Keys.A;
@@ -37,6 +38,12 @@ namespace repulse
                     _downKey = Keys.Down;
                     _leftKey = Keys.Left;
                     _rightKey = Keys.Right;
+                    break;
+                case KeyboardStyleEnum.NumPad:
+                    _upKey = Keys.NumPad8;
+                    _downKey = Keys.NumPad5;
+                    _leftKey = Keys.NumPad4;
+                    _rightKey = Keys.NumPad6;
                     break;
 
             }

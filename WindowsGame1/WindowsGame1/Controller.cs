@@ -6,6 +6,17 @@ using System.Text;
 
 namespace repulse
 {
+    public enum ControllerEnum
+    {
+        WASD,
+        IJKL,
+        Arrow,
+        NumPad,
+        LeftSide,
+        RightSide,
+        Blank
+    }
+
     public class Controller
     {
 

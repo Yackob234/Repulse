@@ -17,8 +17,6 @@ namespace repulse
 
         public PS3Controller(PS3StyleEnum style)
         {
-            _aButton = Buttons.A;
-            _buttonState.Add(_aButton, false);
 
             switch (style)
             {
@@ -27,19 +25,22 @@ namespace repulse
                     _downStick = Buttons.LeftThumbstickDown;
                     _leftStick = Buttons.LeftThumbstickLeft;
                     _rightStick = Buttons.LeftThumbstickRight;
+                    _trigger = Buttons.LeftTrigger;
                     break;
                 case PS3StyleEnum.RightSide:
                     _upStick = Buttons.RightThumbstickUp;
                     _downStick = Buttons.RightThumbstickDown;
                     _leftStick = Buttons.RightThumbstickLeft;
                     _rightStick = Buttons.RightThumbstickRight;
+                    _trigger = Buttons.RightTrigger;
                     break;
             }
             _buttonState.Add(_upStick, false);
             _buttonState.Add(_downStick, false);
             _buttonState.Add(_leftStick, false);
             _buttonState.Add(_rightStick, false);
-
+            _buttonState.Add(_trigger, false);
+      
         }
 
         public override void Update(GameTime gameTime)
@@ -70,8 +71,7 @@ namespace repulse
             SetState(newState, _downStick, DirectionEnum.Down);   
             SetState(newState, _leftStick, DirectionEnum.Left);
             SetState(newState, _rightStick, DirectionEnum.Right);
-
-            SetActionState(newState, _aButton, ActionEnum.Button1);
+            SetActionState(newState, _trigger, ActionEnum.Button1);
 
             base.Update(gameTime);
         }
@@ -125,7 +125,7 @@ namespace repulse
         private Buttons _rightStick;
         private Buttons _upStick;
         private Buttons _downStick;
-        private Buttons _aButton;
+        private Buttons _trigger;
         private Dictionary<Buttons, bool> _buttonState = new Dictionary<Buttons, bool>();
     }
 }

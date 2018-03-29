@@ -12,6 +12,7 @@ namespace repulse
         CharacterSelect,
         MainGameplay,
         EndScreen,
-        PlayerInformationScreen
+        PlayerInformationScreen,
+        ControllerTypeSelect
     }
 }

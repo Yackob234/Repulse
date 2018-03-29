@@ -7,6 +7,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace repulse
 {
+    public enum CharacterEnum
+    {
+        PixelGenji,
+        CuteGenji,
+        EvilGenji,
+        Reinhardt,
+        Mercy,
+        Torbjorn
+    }
+
     public class Character : Entity
     {
         private string _assetName;

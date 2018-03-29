@@ -118,7 +118,6 @@ namespace repulse
                         break;
                     case 2:
                         _scale = 0.66f;
-                        //needs adjustin
                         break;
                     case 3:
                         _scale = 0.79f;
