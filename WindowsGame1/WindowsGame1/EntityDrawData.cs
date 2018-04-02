@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
@@ -14,12 +15,15 @@ namespace repulse
         /*
         TODO: 
         add ps3 controller
-        changing all timers to real time.
         make sure two ps3 controllers work
-        animations :(
-        write high scores from AI mode
+        add who got highscore
+        animations :( wamp wamp wampppp
         
         ~~
+        write high scores from AI mode
+        changing all timers to real time.
+        adding a new font kinda
+        adding a timer 
         add type of controller select
         add a correct timer counter/for AI
         add bot mode - started
@@ -28,7 +32,6 @@ namespace repulse
         Add grey things for text - help SHADOW
         
         Questions: 
-        how to read a txt file.
         ~~
         where do i find xbox controller software?
         .gitignore?? 
@@ -47,17 +50,17 @@ namespace repulse
         public CharacterEnum characterChoice;
         public CharacterEnum p1Character;
         public CharacterEnum p2Character;
-        public int timer = 0;
-        public int timerLimit = 500;
-        public int attackTimer = 0;
-        public int attackTimerLimit = 70;
-        public int attackDelayTimerLimit = 50;
-        public int attackDelayTimer = 0;
-        public int choiceTimer = 0;
-        public int choiceTimerLimit = 50;
-        public int generalTimerStage1 = 0;
-        public int moveChoiceTimer = 0;
-        public int moveChoiceTimerLimit = 25;
+        public double timer = 0;
+        public int timerLimit = 8000;
+        public double attackTimer = 0;
+        public int attackTimerLimit = 1400;
+        public int attackDelayTimerLimit = 1000;
+        public double attackDelayTimer = 0;
+        public double choiceTimer = 0;
+        public int choiceTimerLimit = 500;
+        public double generalTimerStage1 = 0;
+        public double moveChoiceTimer = 0;
+        public int moveChoiceTimerLimit = 250;
         public bool attack = false;
         public bool newAttacker = true;
         public bool attackCast = false;
@@ -66,25 +69,27 @@ namespace repulse
         public string[] Dead = new string[2];
         public string[] deaddead = new string[2];
         public SpriteFont font;
+        public SpriteFont fontDejaVu;
         //represents the stage in which the game in is (selections screens playings, ending screens)
         public StageEnum Stage = StageEnum.ControllerTypeSelect;
         public int gameMode = 0;
         public bool BlockAnimation;
         public bool DamageAnimation;
-        public int hitTimer = 0;
+        public double hitTimer = 0;
         public bool weaponSpeedNeedReset = true;
         public bool initCompleted = false;
         //debugging variables:
         public int debug = -1;
         public int ChangedAttackerRan = 0;
-        public int debugDelay = 0;
-        public int debugDelayLimit = 25;
+        public double debugDelay = 0;
+        public int debugDelayLimit = 250;
         public int pause = -1;
-        public int pauseDelay = 0;
-        public int pauseDelayLimit = 25;
-        public int informationTimer = 0;
-        public int informationTimerLimit = 250;
+        public double pauseDelay = 0;
+        public int pauseDelayLimit = 250;
+        public double informationTimer = 0;
+        public int informationTimerLimit = 5000;
         public Color fontColor = Color.Khaki;
+        public bool newHighScore = false;
 
         //private variables
         private GraphicsDevice graphicsDevice;
@@ -110,7 +115,8 @@ namespace repulse
         private Gamemode twoPlayers;
         private Gamemode onePlayer;
         private Random _r = new Random();
-
+        //private StreamReader _scoreReader = new StreamReader("score.txt");
+        //private StreamWriter _scoreWriter = new StreamWriter("score.txt");
         //lists
         private List<Controller> _controllers = new List<Controller>();
         //private Dictionary<ControllerEnum, Controller> _controllers = new Dictionary<ControllerEnum, Controller>();
@@ -127,6 +133,7 @@ namespace repulse
         private bool _lastStand = false;
         private bool _initLastStand = false;
         private bool _chosenAttack = false;
+        private bool _p1chosen = false;
         
         
         public EntityDrawData(GraphicsDevice graphicsDevice, ContentManager contentManager)
@@ -147,6 +154,7 @@ namespace repulse
             _entities.Add(twoPlayers);
 
             font = LoadFont("SpriteFont_sml");
+            fontDejaVu = LoadFont("SpriteFont1");
 
             
             LoadControllers(WASDcontroller, ControllerEnum.WASD);
@@ -233,9 +241,6 @@ namespace repulse
                                 Controller_Character(characterChoice, true, 1);
                                 p2Character = characterChoice;
 
-                                Console.Write(Player2Controller);
-                                Console.WriteLine(_currentController);
-
                                 if (initCompleted == false) stage2Declair();
                                 else {
                                     if (_currentController == Player2Controller)
@@ -276,17 +281,16 @@ namespace repulse
                     }
                     else if (gameMode == 2)
                     {
-                        if (_currentController == Player1Controller)
+                        if (_currentController == Player1Controller && _p1chosen == false)
                         {
-                            Controller_Character(characterChoice, true, _currentController);
+                            Controller_Character(characterChoice, true, 0);
                             Change_currentController();
-
+                            _p1chosen = true;
                             p1Character = characterChoice;
-
                         }
-                        else if (_currentController == Player2Controller)
+                        else if (_p1chosen == true)
                         {
-                            Controller_Character(characterChoice, true, _currentController);
+                            Controller_Character(characterChoice, true, 1);
                             p2Character = characterChoice;
 
                             if (initCompleted == false) stage2Declair();
@@ -372,28 +376,29 @@ namespace repulse
                     moveChoiceTimer = 0;
                 }
 
-                else if (Stage == StageEnum.BackgroundSelect && moveChoiceTimer >= moveChoiceTimerLimit)
-                {
-                    switch (dir)
-                    {
-                        case DirectionEnum.Up:
-                            chosen.y--;
-                            break;
-                        case DirectionEnum.Down:
-                            chosen.y++;
-                            break;
-                        case DirectionEnum.Left:
-                            chosen.x--;
-                            break;
-                        case DirectionEnum.Right:
-                            chosen.x++;
-                            break;
-                    }
-                    moveChoiceTimer = 0;
-                }
+                
                 if (gameMode == 1)
                 {
-                    if (Stage == StageEnum.CharacterSelect)
+                    if (Stage == StageEnum.BackgroundSelect && moveChoiceTimer >= moveChoiceTimerLimit)
+                    {
+                        switch (dir)
+                        {
+                            case DirectionEnum.Up:
+                                chosen.y--;
+                                break;
+                            case DirectionEnum.Down:
+                                chosen.y++;
+                                break;
+                            case DirectionEnum.Left:
+                                chosen.x--;
+                                break;
+                            case DirectionEnum.Right:
+                                chosen.x++;
+                                break;
+                        }
+                        moveChoiceTimer = 0;
+                    }
+                    else if (Stage == StageEnum.CharacterSelect)
                     {
                         if (_controllers.IndexOf(controller) == _currentController && moveChoiceTimer >= moveChoiceTimerLimit)
                         {
@@ -446,9 +451,31 @@ namespace repulse
                 }
                 else if (gameMode == 2)
                 {
-                    if (Stage == StageEnum.CharacterSelect)
+                    if (Stage == StageEnum.BackgroundSelect && moveChoiceTimer >= moveChoiceTimerLimit)
                     {
-                        if (moveChoiceTimer >= moveChoiceTimerLimit && _controllers.IndexOf(controller) == 1)
+                        if (moveChoiceTimer >= moveChoiceTimerLimit && _controllers.IndexOf(controller) == _currentController)
+                        {
+                            switch (dir)
+                            {
+                                case DirectionEnum.Up:
+                                    chosen.y--;
+                                    break;
+                                case DirectionEnum.Down:
+                                    chosen.y++;
+                                    break;
+                                case DirectionEnum.Left:
+                                    chosen.x--;
+                                    break;
+                                case DirectionEnum.Right:
+                                    chosen.x++;
+                                    break;
+                            }
+                            moveChoiceTimer = 0;
+                        }
+                    }
+                    else if (Stage == StageEnum.CharacterSelect)
+                    {
+                        if (moveChoiceTimer >= moveChoiceTimerLimit && _controllers.IndexOf(controller) == _currentController)
                         {
                             switch (dir)
                             {
@@ -472,7 +499,7 @@ namespace repulse
                     }
                     else if (Stage == StageEnum.MainGameplay)
                     {
-                        if (moveChoiceTimer >= moveChoiceTimerLimit && _controllers.IndexOf(controller) == 1) blockDirection = dir;
+                        if (moveChoiceTimer >= moveChoiceTimerLimit && _controllers.IndexOf(controller) == _currentController) blockDirection = dir;
                     }
                 }
             }
@@ -492,11 +519,11 @@ namespace repulse
                 deaddead[chosenCharacter] = "mercydeaddead";
             }
             */
-            alive[1] = "torbjorn";
-            Dead[1] = "torbjornDead";
-            deaddead[1] = "torbjorndeaddead";
-            alive[0] = "reinhardt";
-            Dead[0] = "reinhardtDead";
+            alive[1] = "genji1";
+            Dead[1] = "genji2Dead";
+            deaddead[1] = "genji3deaddead";
+            alive[0] = "torbjorn";
+            Dead[0] = "mercyDead";
             deaddead[0] = "reinhardtdeaddead";
             
 
@@ -601,10 +628,11 @@ namespace repulse
             //chooses the sprite for each player
 
             //if you cannot attack return
+
             
             
-                //for errors
-                alive[chosenCharacter] = "mercy";
+            //for errors
+            alive[chosenCharacter] = "mercy";
                 Dead[chosenCharacter] = "mercyDead";
                 deaddead[chosenCharacter] = "mercydeaddead";
                 //choosing stuff
@@ -942,6 +970,7 @@ namespace repulse
                 {
                     _victor = 1;
                     _p1.health--;
+
                 }
             }
 
@@ -957,15 +986,19 @@ namespace repulse
         }
         public void Change_currentController()
         {
-            if (_currentController == Player1Controller)
+            if(gameMode == 1)
             {
-                _currentController = Player2Controller;
+                if (_currentController == Player1Controller)
+                {
+                    _currentController = Player2Controller;
+                }
+                else if (_currentController == Player2Controller)
+                {
+                    _currentController = Player1Controller;
+                }
             }
-            else if (_currentController == Player2Controller)
-            {
-                _currentController = Player1Controller;
-            }
-            Console.WriteLine(Player2Controller + " " + Player1Controller);
+            
+            //Console.WriteLine(Player2Controller + " " + Player1Controller);
         }
         
         public void ChangeAttacker()
@@ -1015,13 +1048,14 @@ namespace repulse
         public void AttackAnimation(GameTime gameTime)
         {
             //logic for the attacking
-            attackCast = true;
-            attackTimer++;
+            
+            attackTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
             reactionTime += gameTime.ElapsedGameTime.TotalMilliseconds;
 
 
             if (gameMode == 1)
             {
+                attackCast = true;
                 if (attackTimer >= attackTimerLimit)
                 {
 
@@ -1061,8 +1095,17 @@ namespace repulse
                 {
                     if (weaponSpeedNeedReset)
                     {
-                        _weapons1[attackDirection].resetWeaponSpeed(attackDirection, attackTimerLimit);
-                        _weapons2[attackDirection].resetWeaponSpeed(attackDirection, attackTimerLimit);
+                        for (int i = 0; i < _weapons1.Count; i++)
+                        {
+                            DirectionEnum dir = DirectionEnum.Blank;
+                            if (i == 0) dir = DirectionEnum.Down;
+                            if (i == 1) dir = DirectionEnum.Up;
+                            if (i == 2) dir = DirectionEnum.Left;
+                            if (i == 3) dir = DirectionEnum.Right;
+
+                            _weapons1[dir].resetWeaponSpeed(attackDirection, attackTimerLimit);
+                            _weapons2[dir].resetWeaponSpeed(attackDirection, attackTimerLimit);
+                        }
                         weaponSpeedNeedReset = false;
                     }
                     if (_currentController == Player1Controller)
@@ -1097,16 +1140,36 @@ namespace repulse
                     {
                         attackTimerLimit = 2;
                     }
-                    _weapons2[attackDirection].resetWeaponPosition(attackDirection);
+
+
+                    if (attackDirection != DirectionEnum.Blank)
+                    {
+                        _weapons2[attackDirection].resetWeaponPosition(attackDirection);
+                    }
+
+
                     _chosenAttack = false;
                     
                     damage();
+
+
+
+
                 }
                 if (attackCast == true)
                 {
                     if (weaponSpeedNeedReset)
                     {
-                        _weapons2[attackDirection].resetWeaponSpeed(attackDirection, attackTimerLimit);
+                        for (int i = 0; i < _weapons2.Count; i++)
+                        {
+                            DirectionEnum dir = DirectionEnum.Blank;
+                            if (i == 0) dir = DirectionEnum.Down;
+                            if (i == 1) dir = DirectionEnum.Up;
+                            if (i == 2) dir = DirectionEnum.Left;
+                            if (i == 3) dir = DirectionEnum.Right;
+                            
+                            _weapons2[dir].resetWeaponSpeed(attackDirection, attackTimerLimit);
+                        }
                         weaponSpeedNeedReset = false;
                     }
                     _weapons2[attackDirection].weaponMovement(gameTime);
@@ -1115,11 +1178,11 @@ namespace repulse
 
         }
 
-        public void newAttackerDelay(){
+        public void newAttackerDelay(GameTime gameTime){
             //adds a delay so you cant hold down a key
             if (newAttacker == true)
             {
-                attackDelayTimer++;
+                attackDelayTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
             }
             if (attackDelayTimer >= attackDelayTimerLimit)
             {
@@ -1142,6 +1205,7 @@ namespace repulse
         public void ChooseAttackDirection()
         {
             int attackDirectionInt;
+            attackCast = true;
             attackDirectionInt = _r.Next(1, 5);
             switch (attackDirectionInt)
             {
@@ -1172,9 +1236,41 @@ namespace repulse
             choiceTimer = 0;
             _p1.health = 2;
             _p2.health = 2;
-            attackTimerLimit = 70;
+            attackTimerLimit = 1400;
             _currentController = Player1Controller;
             
+        }
+
+        public double highScoreRead()
+        {
+            string fileContents = File.ReadAllText("C:/Users/Yackob/Desktop/Coding/smartgit/Repulse/WindowsGame1/WindowsGame1Content/score.txt");
+
+            double score = Convert.ToDouble(fileContents);  
+            
+            return score;
+            //using (System.IO.StreamReader tr = new System.IO.StreamReader("score.txt"));
+        }
+        public void highScoreWrite(double reaction)
+        {
+            //using (System.IO.StreamWriter tw = new System.IO.StreamWriter("score.txt"))
+            //{
+            //    tw.Write(reaction);
+            //}
+
+            Console.WriteLine(reactionTime);
+            if (highScoreRead() < reactionTime)
+            {
+                newHighScore = false;
+            }
+            else if (highScoreRead() > reactionTime)
+            {
+                string newReactionTime = reactionTime + "\n";
+
+                File.WriteAllText("C:/Users/Yackob/Desktop/Coding/smartgit/Repulse/WindowsGame1/WindowsGame1Content/score.txt", newReactionTime);
+                newHighScore = true;
+            }
+
+
         }
 
 
@@ -1422,28 +1518,28 @@ namespace repulse
 
         public void Update(GameTime gameTime)
         {
-            debugDelay++;
-            pauseDelay++;
+            debugDelay += gameTime.ElapsedGameTime.TotalMilliseconds;
+            pauseDelay += gameTime.ElapsedGameTime.TotalMilliseconds;
             elapsedTime += gameTime.ElapsedGameTime.TotalMilliseconds;
             if (pause == -1)
             {
                 if (Stage == StageEnum.GamemodeSelect)
                 {
-                    choiceTimer++;
-                    moveChoiceTimer++;
+                    choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                    moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                 }
                 else if (Stage == StageEnum.ControllerTypeSelect)
                 {
-                    choiceTimer++;
-                    moveChoiceTimer++;
+                    choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                    moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
 
 
 
                 }
                 else if (Stage == StageEnum.PlayerInformationScreen)
                 {
-                    choiceTimer++;
-                    informationTimer++;
+                    choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                    informationTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                     if (informationTimer >= informationTimerLimit)
                     {
                         informationTimer = 0;
@@ -1455,36 +1551,50 @@ namespace repulse
                     
                     if (Stage == StageEnum.BackgroundSelect)
                     {
-                        choiceTimer++;
-                        moveChoiceTimer++;
+                        choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                     }
                     else if (Stage == StageEnum.CharacterSelect)
                     {
-                        choiceTimer++;
-                        moveChoiceTimer++;
+                        choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                         playersCharacterChoice();
                     }
                     else if (Stage == StageEnum.MainGameplay)
                     {
 
                         // CharacterChoice.Update(gameTime);
-                        timer++;
-                        newAttackerDelay();
+                        timer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        newAttackerDelay(gameTime);
                         if (_victor != 0)
                         {
 
                             stageChange();
                         }
-                        if (attack == true)
-                        {
-                            AttackAnimation(gameTime);
-                        }
-                        if (timer > timerLimit )
+                        if(attack == false && timer > timerLimit - attackTimer)
                         {
                             timer = 0;
                             damage();
+                        }else if (attack == true && timer < timerLimit - attackTimer)
+                        {
+                            AttackAnimation(gameTime);
                         }
+                        else if (attack == true && timer > timerLimit - attackTimer)
+                        {
+                            AttackAnimation(gameTime);
+                        }
+                        /*
+                        if (timer > timerLimit)
+                        {
+                            
+                        } else if (timer < timerLimit - attackTimer)
+                        {
 
+                            if (attack == true)
+                            {
+                            }
+                        }
+                        */
                     }
                     else if (Stage == StageEnum.EndScreen)
                     {
@@ -1496,23 +1606,24 @@ namespace repulse
 
                     if (Stage == StageEnum.BackgroundSelect)
                     {
-                        choiceTimer++;
-                        moveChoiceTimer++;
+                        choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                     }
                     else if (Stage == StageEnum.CharacterSelect)
                     {
-                        choiceTimer++;
-                        moveChoiceTimer++;
+                        choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                         playersCharacterChoice();
                     }
                     else if (Stage == StageEnum.MainGameplay)
                     {
 
                         // CharacterChoice.Update(gameTime);
-                        timer++;
-                        newAttackerDelay();
+                        timer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        newAttackerDelay(gameTime);
                         if (_victor != 0)
                         {
+                            highScoreWrite(reactionTime);
                             stageChange();
                         }
                         if (timer > 150)
@@ -1581,15 +1692,11 @@ Now, Please select a gamemode!
                 spriteBatch.DrawString(font, String.Format(startingScreen), TextShadowPosition(new Vector2(250.0f, 0.0f), 1), Color.Black);
                 spriteBatch.DrawString(font, String.Format(startingScreen), new Vector2(250.0f, 0.0f), fontColor);
 
-                const string startingScreen1 = @"
-VS a Friend
-";
+                const string startingScreen1 = "VS a Friend";
                 spriteBatch.DrawString(font, String.Format(startingScreen1), TextShadowPosition(new Vector2(200.0f, 125.0f), 1), Color.Black);
                 spriteBatch.DrawString(font, String.Format(startingScreen1), new Vector2(200.0f, 125.0f), fontColor);
 
-                const string startingScreen2 = @"
-Agaisnt an Bot
-";
+                const string startingScreen2 = "Agaisnt an Bot";
                 spriteBatch.DrawString(font, String.Format(startingScreen2), TextShadowPosition(new Vector2(650.0f, 125.0f), 1), Color.Black);
                 spriteBatch.DrawString(font, String.Format(startingScreen2), new Vector2(650.0f, 125.0f), fontColor);
 
@@ -1624,15 +1731,11 @@ Finally, hit the action button of the controller to confirm
                 spriteBatch.DrawString(font, String.Format(startingScreencontroller), TextShadowPosition(new Vector2(300.0f, 0.0f), 1), Color.Black);
                 spriteBatch.DrawString(font, String.Format(startingScreencontroller), new Vector2(300.0f, 0.0f), fontColor);
 
-                const string startingScreen1 = @"
-Player 1's Controller
-";
+                const string startingScreen1 = "Player 1's Controller";
                 spriteBatch.DrawString(font, String.Format(startingScreen1), TextShadowPosition(new Vector2(200.0f, 125.0f), 1), Color.Black);
                 spriteBatch.DrawString(font, String.Format(startingScreen1), new Vector2(200.0f, 125.0f), fontColor);
 
-                const string startingScreen2 = @"
-Player 2's Controller
-";
+                const string startingScreen2 = "Player 2's Controller";
                 spriteBatch.DrawString(font, String.Format(startingScreen2), TextShadowPosition(new Vector2(650.0f, 125.0f), 1), Color.Black);
                 spriteBatch.DrawString(font, String.Format(startingScreen2), new Vector2(650.0f, 125.0f), fontColor);
 
@@ -1655,10 +1758,10 @@ You have chosen to play against a bot,
 You cannot win this mode, 
 There is only defending,
 And training reaction time.
-Your Controls are Arrows.
+Current Highscore is: {0} Miliiseconds.
 ";
-                    spriteBatch.DrawString(font, String.Format(startingScreenp22), TextShadowPosition(new Vector2(350.0f, 0.0f), 1), Color.Black);
-                    spriteBatch.DrawString(font, String.Format(startingScreenp22), new Vector2(350.0f, 0.0f), fontColor);
+                    spriteBatch.DrawString(font, String.Format(startingScreenp22, highScoreRead()), TextShadowPosition(new Vector2(350.0f, 0.0f), 1), Color.Black);
+                    spriteBatch.DrawString(font, String.Format(startingScreenp22, highScoreRead()), new Vector2(350.0f, 0.0f), fontColor);
 
                 }
             }
@@ -1667,9 +1770,7 @@ Your Controls are Arrows.
             {
                 if (Stage == StageEnum.BackgroundSelect)
                 {
-                    const string backgroundSelectInfo = @"
-Please select a background.
-";
+                    const string backgroundSelectInfo = "Please select a background.";
                     Vector2 _pos = new Vector2(5.0f, 0.0f);
                     spriteBatch.DrawString(font, String.Format(backgroundSelectInfo), TextShadowPosition(new Vector2(400.0f, 0.0f), 1), Color.Black);
                     spriteBatch.DrawString(font, String.Format(backgroundSelectInfo), new Vector2(400.0f, 0.0f), fontColor);
@@ -1695,9 +1796,7 @@ Stage: {7}
 
                     }
                     
-                    const string instructions = @"
-Player {0}: please choose a Character
-";
+                    const string instructions = "Player {0}: please choose a Character";
                     if (_currentController == Player1Controller)
                     {
                         spriteBatch.DrawString(font, String.Format(instructions, 1), TextShadowPosition(new Vector2(350, 0.0f), 1.25f), Color.Black, 0, Vector2.Zero, 1.25f, SpriteEffects.None, 0);
@@ -1737,17 +1836,23 @@ Stage: {13}
                             _p2.health, newAttacker, attackDelayTimer, ChangedAttackerRan, _p2.attacker, attackTimerLimit, _currentController, Stage
                             ), new Vector2(5.0f, 0.0f), fontColor);
                     }
+                    const string timeRemainingText = "{0}";
+                    int timeRemaining = timerLimit - (int)timer - (int)attackTimer;
+                    if (timeRemaining <= 0)
+                    {
+                        timeRemaining = 0;
+                    }
+                    spriteBatch.DrawString(fontDejaVu, String.Format(timeRemainingText, timeRemaining), TextShadowPosition(new Vector2(700.0f, -40.0f), 2), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                    spriteBatch.DrawString(fontDejaVu, String.Format(timeRemainingText, timeRemaining), new Vector2(700.0f, -40.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0f);
 
                     if (BlockAnimation)
                     {
-                        hitTimer++;
-                        const string blockText = @"
-Block!!
-";
+                        hitTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        const string blockText = "Block!!";
                         
-                        spriteBatch.DrawString(font, String.Format(blockText), TextShadowPosition(new Vector2(445.0f, 50.0f), 2), Color.Black, 0, Vector2.Zero, 2f, SpriteEffects.None, 0f);
-                        spriteBatch.DrawString(font, String.Format(blockText), new Vector2(445.0f, 50.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0f);
-                        if (hitTimer > 50)
+                        spriteBatch.DrawString(fontDejaVu, String.Format(blockText), TextShadowPosition(new Vector2(445.0f, 50.0f), 2), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                        spriteBatch.DrawString(fontDejaVu, String.Format(blockText), new Vector2(445.0f, 50.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                        if (hitTimer > 500)
                         {
                             BlockAnimation = false;
                             hitTimer = 0;
@@ -1755,13 +1860,11 @@ Block!!
                     }
                     if (DamageAnimation)
                     {
-                        hitTimer++;
-                        const string damageText = @"
-Hit!!
-";
-                        spriteBatch.DrawString(font, String.Format(damageText), TextShadowPosition(new Vector2(450.0f, 50.0f), 1), Color.Black, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
-                        spriteBatch.DrawString(font, String.Format(damageText), new Vector2(450.0f, 50.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
-                        if (hitTimer > 50)
+                        hitTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        const string damageText = "Hit!!";
+                        spriteBatch.DrawString(fontDejaVu, String.Format(damageText), TextShadowPosition(new Vector2(450.0f, 50.0f), 1), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(fontDejaVu, String.Format(damageText), new Vector2(450.0f, 50.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        if (hitTimer > 500)
                         {
                             DamageAnimation = false;
                             hitTimer = 0;
@@ -1769,19 +1872,17 @@ Hit!!
                     }
                     if (_lastStand)
                     {
-                        const string lastStandText = @"
-Player {0} you must strike back or die!
-";
+                        const string lastStandText = "Player {0} you must strike back or die!";
                         if(_currentController == Player1Controller)
                         {
-                            spriteBatch.DrawString(font, String.Format(lastStandText, 1), TextShadowPosition(new Vector2(250.0f, 25.0f), 1), Color.Black, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
-                            spriteBatch.DrawString(font, String.Format(lastStandText, 1), new Vector2(250.0f, 25.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
+                            spriteBatch.DrawString(fontDejaVu, String.Format(lastStandText, 1), TextShadowPosition(new Vector2(150.0f, 10.0f), 1), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                            spriteBatch.DrawString(fontDejaVu, String.Format(lastStandText, 1), new Vector2(150.0f, 10.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
 
                         }
                         else if (_currentController == Player2Controller)
                         {
-                            spriteBatch.DrawString(font, String.Format(lastStandText, 2), TextShadowPosition(new Vector2(250.0f, 25.0f), 1), Color.Black, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
-                            spriteBatch.DrawString(font, String.Format(lastStandText, 2), new Vector2(250.0f, 25.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
+                            spriteBatch.DrawString(fontDejaVu, String.Format(lastStandText, 2), TextShadowPosition(new Vector2(150.0f, 10.0f), 1), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                            spriteBatch.DrawString(fontDejaVu, String.Format(lastStandText, 2), new Vector2(150.0f, 10.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
                         }
                     }
 
@@ -1817,11 +1918,9 @@ Stage: {11}
                     }
                     if (_victor != 0)
                     {
-                        const string victoryText = @"
-Player {0} Wins!!
-";
-                        spriteBatch.DrawString(font, String.Format(victoryText, _victor), TextShadowPosition(new Vector2(400.0f, 0.0f), 1), Color.Black, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
-                        spriteBatch.DrawString(font, String.Format(victoryText, _victor), new Vector2(400.0f, 0.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
+                        const string victoryText = "Player {0} Wins!!";
+                        spriteBatch.DrawString(fontDejaVu, String.Format(victoryText, _victor), TextShadowPosition(new Vector2(350.0f, 0.0f), 1), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(fontDejaVu, String.Format(victoryText, _victor), new Vector2(350.0f, 0.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
                     }
                 }
             }
@@ -1833,9 +1932,7 @@ Player {0} Wins!!
             {
                 if (Stage == StageEnum.BackgroundSelect)
                 {
-                    const string backgroundSelectInfo = @"
-Please select a background.
-";
+                    const string backgroundSelectInfo = "Please select a background.";
                     Vector2 _pos = new Vector2(5.0f, 0.0f);
                     spriteBatch.DrawString(font, String.Format(backgroundSelectInfo), TextShadowPosition(new Vector2(400.0f, 0.0f), 1), Color.Black);
                     spriteBatch.DrawString(font, String.Format(backgroundSelectInfo), new Vector2(400.0f, 0.0f), fontColor);
@@ -1860,24 +1957,17 @@ Stage: {7}
                         spriteBatch.DrawString(font, String.Format(debugInfo, fps, _currentController, chosen.x, chosen.y, characterChoice, choiceTimer, moveChoiceTimer, Stage), new Vector2(5.0f, 0.0f), fontColor);
 
                     }
-                    if(_currentController == Player1Controller)
+                    string instructions = " ";
+                    if (_p1chosen == false)
                     {
-                        const string instructions = @"
-Please choose your Character
-";
-                        spriteBatch.DrawString(font, String.Format(instructions), TextShadowPosition(new Vector2(400, 0.0f), 1.25f), Color.Black, 0, Vector2.Zero, 1.25f, SpriteEffects.None, 0);
-                        spriteBatch.DrawString(font, String.Format(instructions), new Vector2(400, 0.0f), fontColor, 0, Vector2.Zero, 1.25f, SpriteEffects.None, 0);
-
+                        instructions = "Please choose your Character";
                     }
-                    else if (_currentController == Player2Controller)
+                    else if (_p1chosen == true)
                     {
-                        const string instructions = @"
-Please choose your opponent's Character
-";
-                        spriteBatch.DrawString(font, String.Format(instructions), TextShadowPosition(new Vector2(400, 0.0f), 1.25f), Color.Black, 0, Vector2.Zero, 1.25f, SpriteEffects.None, 0);
-                        spriteBatch.DrawString(font, String.Format(instructions), new Vector2(400, 0.0f), fontColor, 0, Vector2.Zero, 1.25f, SpriteEffects.None, 0);
-
+                        instructions = "Please choose your opponent's Character";
                     }
+                    spriteBatch.DrawString(font, String.Format(instructions), TextShadowPosition(new Vector2(400, 0.0f), 1.25f), Color.Black, 0, Vector2.Zero, 1.25f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(font, String.Format(instructions), new Vector2(400, 0.0f), fontColor, 0, Vector2.Zero, 1.25f, SpriteEffects.None, 0);
 
                 }
                 else if (Stage == StageEnum.MainGameplay)
@@ -1910,14 +2000,12 @@ Stage: {13}
 
                     if (BlockAnimation)
                     {
-                        hitTimer++;
-                        const string blockText = @"
-Block!!
-";
+                        hitTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        const string blockText = "Block!!";
 
-                        spriteBatch.DrawString(font, String.Format(blockText), TextShadowPosition(new Vector2(445.0f, 50.0f), 2), Color.Black, 0, Vector2.Zero, 2f, SpriteEffects.None, 0f);
-                        spriteBatch.DrawString(font, String.Format(blockText), new Vector2(445.0f, 50.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0f);
-                        if (hitTimer > 50)
+                        spriteBatch.DrawString(fontDejaVu, String.Format(blockText), TextShadowPosition(new Vector2(445.0f, 50.0f), 2), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                        spriteBatch.DrawString(fontDejaVu, String.Format(blockText), new Vector2(445.0f, 50.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0f);
+                        if (hitTimer > 500)
                         {
                             BlockAnimation = false;
                             hitTimer = 0;
@@ -1925,13 +2013,11 @@ Block!!
                     }
                     if (DamageAnimation)
                     {
-                        hitTimer++;
-                        const string damageText = @"
-Hit!!
-";
-                        spriteBatch.DrawString(font, String.Format(damageText), TextShadowPosition(new Vector2(450.0f, 50.0f), 1), Color.Black, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
-                        spriteBatch.DrawString(font, String.Format(damageText), new Vector2(450.0f, 50.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
-                        if (hitTimer > 50)
+                        hitTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        const string damageText = "Hit!!";
+                        spriteBatch.DrawString(fontDejaVu, String.Format(damageText), TextShadowPosition(new Vector2(450.0f, 50.0f), 1), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(fontDejaVu, String.Format(damageText), new Vector2(450.0f, 50.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        if (hitTimer > 500)
                         {
                             DamageAnimation = false;
                             hitTimer = 0;
@@ -1965,29 +2051,43 @@ Stage: {11}
                     }
                     if (_victor != 0)
                     {
-                        const string victoryText = @"
-You lose, your ending reaction time was {0} milliseconds.
-";
-                        spriteBatch.DrawString(font, String.Format(victoryText, reactionTime), TextShadowPosition(new Vector2(300.0f, 0.0f), 1), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
-                        spriteBatch.DrawString(font, String.Format(victoryText, reactionTime), new Vector2(300.0f, 0.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        const string victoryText = "You lose, your ending reaction time was {0} milliseconds.";
+                        spriteBatch.DrawString(font, String.Format(victoryText, reactionTime), TextShadowPosition(new Vector2(250.0f, 0.0f), 1), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(font, String.Format(victoryText, reactionTime), new Vector2(250.0f, 0.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        
                     }
+                    string highscoreText;
+                    if (newHighScore == true)
+                    {
+                        highscoreText = "You got a new highscore!!";
+                    } else
+                    {
+                        highscoreText = "You didn't get a new highscore";
+                    }
+                        spriteBatch.DrawString(font, String.Format(highscoreText), TextShadowPosition(new Vector2(350.0f, 50.0f), 1), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(font, String.Format(highscoreText), new Vector2(350.0f, 50.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+
+                    
                 }
             }
 
             if(pause == 1)
             {
                 
-                    const string pauseInfo = @"
-Game is Paused
-";
-                spriteBatch.DrawString(font, String.Format(pauseInfo), TextShadowPosition(new Vector2(800.0f, 0.0f), 1), Color.Black, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
-                spriteBatch.DrawString(font, String.Format(pauseInfo), new Vector2(800.0f, 0.0f), fontColor, 0, Vector2.Zero, 2f, SpriteEffects.None, 0);
+                    const string pauseInfo = "Game is Paused";
+                spriteBatch.DrawString(fontDejaVu, String.Format(pauseInfo), TextShadowPosition(new Vector2(650.0f, 500.0f), 1), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(fontDejaVu, String.Format(pauseInfo), new Vector2(650.0f, 500.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
                 
             }
 
             
 
-            }
-        
+        }
+        public void DrawStrings(GameTime gameTime, SpriteBatch spriteBatch, SpriteFont font, string text, Vector2 pos, Color colour, float rotation, Vector2 origin, float scale, SpriteEffects effect, float layer)
+        {
+            spriteBatch.DrawString(font, String.Format(text), TextShadowPosition(pos, scale), Color.Black, rotation, origin, scale, effect, layer);
+            spriteBatch.DrawString(font, String.Format(text), pos, colour, rotation, origin, scale, effect, layer);
+
+        }
     }
 }

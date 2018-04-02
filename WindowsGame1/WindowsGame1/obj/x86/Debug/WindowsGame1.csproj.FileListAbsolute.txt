@@ -92,3 +92,14 @@ C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x8
 C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\twoPlayers.xnb
 C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\background1.xnb
 C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\background2.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\background3.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\background4.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\background5.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\background6.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\arrow.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\ijkl.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\leftside.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\numpad.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\rightside.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\wasd.xnb
+C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\SpriteFont1.xnb

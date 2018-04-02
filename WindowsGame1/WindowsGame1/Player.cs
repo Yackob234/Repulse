@@ -92,6 +92,8 @@ namespace repulse
                     break;
             }
             _characterChanged = true;
+
+            Console.WriteLine(_assetName);
         }
 
        public void checkHealth()

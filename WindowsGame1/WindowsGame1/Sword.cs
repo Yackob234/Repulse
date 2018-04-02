@@ -152,27 +152,26 @@ namespace repulse
         public void resetWeaponSpeed(DirectionEnum dir, int time)
         {
             //updates the speed of the weapon
-            float xSpeed;
-            float ySpeed;
+            double xSpeed;
+            double ySpeed;
             Vector2 weaponSpeed;
-            int xDistance = _drawData.GraphicsDevice.Viewport.Width / 2 + _texture.Width;
-            int yDistance = _drawData.GraphicsDevice.Viewport.Height / 2 + _texture.Height;
-
-            xSpeed = xDistance / time * 50;
-            ySpeed = yDistance / time * 50;
+            int xDistance = _drawData.GraphicsDevice.Viewport.Width / 2 + _texture.Width / 2;
+            int yDistance = _drawData.GraphicsDevice.Viewport.Height / 2 + _texture.Height / 2;
+            xSpeed = (xDistance * 1000) / time;
+            ySpeed = (yDistance * 1000) / time;
             switch (dir)
             {
                 case DirectionEnum.Up:
-                    weaponSpeed = new Vector2(0.0f, ySpeed);
+                    weaponSpeed = new Vector2(0.0f, (float)ySpeed);
                     break;
                 case DirectionEnum.Down:
-                    weaponSpeed = new Vector2(0.0f, -ySpeed);
+                    weaponSpeed = new Vector2(0.0f, (float)-ySpeed);
                     break;
                 case DirectionEnum.Left:
-                    weaponSpeed = new Vector2(xSpeed, 0.0f);
+                    weaponSpeed = new Vector2((float)xSpeed, 0.0f);
                     break;
                 case DirectionEnum.Right:
-                    weaponSpeed = new Vector2(-xSpeed, 0.0f);
+                    weaponSpeed = new Vector2((float)-xSpeed, 0.0f);
                     break;
                 default:
                     weaponSpeed = Vector2.Zero;

@@ -24,8 +24,6 @@ namespace repulse
 
         public virtual void Update(GameTime gameTime)
         {
-            timer++;
-            if (timer >= timerLimit) timer = 0;
 
         }
         /*
@@ -36,8 +34,6 @@ namespace repulse
         }
         */
         protected float _scale = 1.0f;
-        protected static int timer = 0;
-        protected static int timerLimit = 500;
         protected Vector2 _position;
         protected EntityDrawData _drawData;
         protected Texture2D _texture;
