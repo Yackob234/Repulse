@@ -83,6 +83,7 @@
     <Compile Include="Entity.cs" />
     <Compile Include="EntityDrawData.cs" />
     <Compile Include="Gamemode.cs" />
+    <Compile Include="HighScore.cs" />
     <Compile Include="KeyboardController.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -89,7 +89,6 @@ namespace repulse
         public double informationTimer = 0;
         public int informationTimerLimit = 5000;
         public Color fontColor = Color.Khaki;
-        public bool newHighScore = false;
 
         //private variables
         private GraphicsDevice graphicsDevice;
@@ -115,6 +114,7 @@ namespace repulse
         private Gamemode twoPlayers;
         private Gamemode onePlayer;
         private Random _r = new Random();
+        private HighScore _hs;
         //private StreamReader _scoreReader = new StreamReader("score.txt");
         //private StreamWriter _scoreWriter = new StreamWriter("score.txt");
         //lists
@@ -134,8 +134,8 @@ namespace repulse
         private bool _initLastStand = false;
         private bool _chosenAttack = false;
         private bool _p1chosen = false;
-        
-        
+        //private string 
+
         public EntityDrawData(GraphicsDevice graphicsDevice, ContentManager contentManager)
         {
             this.graphicsDevice = graphicsDevice;
@@ -143,11 +143,12 @@ namespace repulse
             textures = new SortedList<string, Texture2D>();
             fonts = new SortedList<string, SpriteFont>();
 
-            for(int i = 1; i < 7; i++)
+            for (int i = 1; i < 7; i++)
             {
                 LoadBackgrounds(i);
             }
 
+            _hs = new HighScore(this);
             onePlayer = new Gamemode(this, "onePlayer", 2);
             twoPlayers = new Gamemode(this, "twoPlayers", 1);
             _entities.Add(onePlayer);
@@ -204,7 +205,13 @@ namespace repulse
                 }
                 else if (Stage == StageEnum.ControllerTypeSelect)
                 {
-                    if(_controllers.IndexOf(controller) == Player1Controller || _controllers.IndexOf(controller) == Player2Controller)
+                    //Console.WriteLine(_controllers.IndexOf(controller) + " xd " + Player1Controller + " <-p1p2-> " + Player2Controller);
+                    bool keyboardEnter = false;
+                    if(Player1Controller <= 3 && Player1Controller >= 0 || Player2Controller <= 3 && Player2Controller >= 0)
+                    {
+                        keyboardEnter = true;
+                    }
+                    if(_controllers.IndexOf(controller) == Player1Controller || _controllers.IndexOf(controller) == Player2Controller || keyboardEnter)
                     {
                         stageChange();
                         _currentController = Player1Controller;
@@ -321,13 +328,21 @@ namespace repulse
                 {
 
                 }
-                
+                else if (Stage == StageEnum.EndScreen)
+                {
+                    if (gameMode == 1)
+                    {
+                        resetGame();
+                    }
+                    else if (gameMode == 2)
+                    {
+                        resetGame();
+                    }
+                    
+                }
                 choiceTimer = 0;
             }
-            if (Stage == StageEnum.EndScreen)
-            {
-                resetGame();
-            }
+            
         }
         private void Controller_Direction(Controller controller, DirectionEnum dir, bool pressed)
         {
@@ -337,10 +352,12 @@ namespace repulse
                 if (dir == DirectionEnum.Up && Player1Controller == -1)
                 {
                     Player1Controller = _controllers.IndexOf(controller);
+                    //Console.WriteLine(Player1Controller);
                 }
                 else if (dir == DirectionEnum.Up && Player2Controller == -1)
                 {
                     Player2Controller = _controllers.IndexOf(controller);
+                    
                     if (Player2Controller == Player1Controller)
                     {
                         Player2Controller = -1;
@@ -434,7 +451,6 @@ namespace repulse
                         {
 
                             // attacker
-                            // Console.WriteLine("attacker");
                             if (pressed) pressedExtention = true;
 
                             _arrows[dir].Toggle(pressedExtention);
@@ -444,7 +460,6 @@ namespace repulse
                         else if (_controllers.IndexOf(controller) != _currentController)
                         {
                             // defender
-                            //Console.WriteLine("defender");
                             blockDirection = dir;
                         }
                     }
@@ -501,6 +516,28 @@ namespace repulse
                     {
                         if (moveChoiceTimer >= moveChoiceTimerLimit && _controllers.IndexOf(controller) == _currentController) blockDirection = dir;
                     }
+                    else if (Stage == StageEnum.EndScreen)
+                    {
+                        if (moveChoiceTimer >= moveChoiceTimerLimit && _controllers.IndexOf(controller) == _currentController)
+                        {
+                            if (dir == DirectionEnum.Up)
+                            {
+                                _hs.IncreaseHighScoreLetter();
+                            } 
+                            else if (dir == DirectionEnum.Down)
+                            {
+                                _hs.DecreaseHighScoreLetter();
+                            }
+                            else if (dir == DirectionEnum.Right)
+                            {
+                                _hs.ShiftLetterPosition("+");
+                            }
+                            else if (dir == DirectionEnum.Left)
+                            {
+                                _hs.ShiftLetterPosition("-");
+                            }
+                        }
+                    }
                 }
             }
             
@@ -552,7 +589,6 @@ namespace repulse
                     break;
             }
             _controllers.Add(controller);
-
             controller.Direction += Controller_Direction;
 
             controller.Action += Controller_Action;
@@ -585,6 +621,7 @@ namespace repulse
             }
             var conIcon = new ControllerIcon(this, texture, _con);
             _controllerIcons.Add(_con, conIcon);
+            //Console.WriteLine(texture + _con);
             AddEntity(conIcon);
         }
         public void LoadBackgrounds(int position)
@@ -1241,39 +1278,7 @@ namespace repulse
             
         }
 
-        public double highScoreRead()
-        {
-            string fileContents = File.ReadAllText("C:/Users/Yackob/Desktop/Coding/smartgit/Repulse/WindowsGame1/WindowsGame1Content/score.txt");
-
-            double score = Convert.ToDouble(fileContents);  
-            
-            return score;
-            //using (System.IO.StreamReader tr = new System.IO.StreamReader("score.txt"));
-        }
-        public void highScoreWrite(double reaction)
-        {
-            //using (System.IO.StreamWriter tw = new System.IO.StreamWriter("score.txt"))
-            //{
-            //    tw.Write(reaction);
-            //}
-
-            Console.WriteLine(reactionTime);
-            if (highScoreRead() < reactionTime)
-            {
-                newHighScore = false;
-            }
-            else if (highScoreRead() > reactionTime)
-            {
-                string newReactionTime = reactionTime + "\n";
-
-                File.WriteAllText("C:/Users/Yackob/Desktop/Coding/smartgit/Repulse/WindowsGame1/WindowsGame1Content/score.txt", newReactionTime);
-                newHighScore = true;
-            }
-
-
-        }
-
-
+        
 
         public void stage2Declair()
         {
@@ -1623,7 +1628,7 @@ namespace repulse
                         newAttackerDelay(gameTime);
                         if (_victor != 0)
                         {
-                            highScoreWrite(reactionTime);
+                            _hs.highScoreWrite(reactionTime);
                             stageChange();
                         }
                         if (timer > 150)
@@ -1635,7 +1640,9 @@ namespace repulse
                     }
                     else if (Stage == StageEnum.EndScreen)
                     {
-
+                        choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        timer += gameTime.ElapsedGameTime.TotalMilliseconds;
                     }
                 }
                 for (var i = 0; i < _controllers.Count; ++i)
@@ -1760,8 +1767,8 @@ There is only defending,
 And training reaction time.
 Current Highscore is: {0} Miliiseconds.
 ";
-                    spriteBatch.DrawString(font, String.Format(startingScreenp22, highScoreRead()), TextShadowPosition(new Vector2(350.0f, 0.0f), 1), Color.Black);
-                    spriteBatch.DrawString(font, String.Format(startingScreenp22, highScoreRead()), new Vector2(350.0f, 0.0f), fontColor);
+                    spriteBatch.DrawString(font, String.Format(startingScreenp22, _hs.highScoreRead()), TextShadowPosition(new Vector2(350.0f, 0.0f), 1), Color.Black);
+                    spriteBatch.DrawString(font, String.Format(startingScreenp22, _hs.highScoreRead()), new Vector2(350.0f, 0.0f), fontColor);
 
                 }
             }
@@ -2057,15 +2064,29 @@ Stage: {11}
                         
                     }
                     string highscoreText;
-                    if (newHighScore == true)
+                    if (_hs.newHighScore == true)
                     {
-                        highscoreText = "You got a new highscore!!";
-                    } else
+                        highscoreText = @"
+You got a new highscore!!
+Please Enter your Name!
+";
+                        string playerName = _hs.CurrentHighScoreName();
+                        Console.WriteLine(playerName);
+                        spriteBatch.DrawString(font, String.Format(playerName), TextShadowPosition(new Vector2(350.0f, 100.0f), 1), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(font, String.Format(playerName), new Vector2(350.0f, 100.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+
+
+
+
+
+                    }
+                    else
                     {
                         highscoreText = "You didn't get a new highscore";
                     }
                         spriteBatch.DrawString(font, String.Format(highscoreText), TextShadowPosition(new Vector2(350.0f, 50.0f), 1), Color.Black, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
                         spriteBatch.DrawString(font, String.Format(highscoreText), new Vector2(350.0f, 50.0f), fontColor, 0, Vector2.Zero, 1f, SpriteEffects.None, 0);
+
 
                     
                 }
