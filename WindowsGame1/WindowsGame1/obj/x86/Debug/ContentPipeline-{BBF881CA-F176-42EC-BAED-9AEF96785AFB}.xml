@@ -476,7 +476,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\leftside.xnb</Output>
-      <Time>2018-03-29T13:44:07.5404527-04:00</Time>
+      <Time>2018-04-04T15:37:23.9846066-04:00</Time>
     </Item>
     <Item>
       <Source>numpad.png</Source>
@@ -494,7 +494,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\Yackob\Desktop\Coding\smartgit\Repulse\WindowsGame1\WindowsGame1\bin\x86\Debug\Content\rightside.xnb</Output>
-      <Time>2018-03-29T13:44:07.5464569-04:00</Time>
+      <Time>2018-04-04T15:36:18.9722701-04:00</Time>
     </Item>
     <Item>
       <Source>wasd.png</Source>

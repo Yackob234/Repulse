@@ -17,8 +17,8 @@ namespace repulse
 
         public PS3Controller(PS3StyleEnum style)
         {
-
-            switch (style)
+            _style = style;
+            switch (_style)
             {
                 case PS3StyleEnum.LeftSide:
                     _upStick = Buttons.LeftThumbstickUp;
@@ -103,22 +103,46 @@ namespace repulse
 
         private bool IsStickPressed(GamePadState current, DirectionEnum dir)
         {
-            if (current.ThumbSticks.Left.X < -0.5f && dir == DirectionEnum.Left)
+            switch (_style)
             {
-                return true;
+                case PS3StyleEnum.LeftSide:
+                    if (current.ThumbSticks.Left.X < -0.5f && dir == DirectionEnum.Left)
+                    {
+                        return true;
+                    }
+                    else if (current.ThumbSticks.Left.X > 0.5f && dir == DirectionEnum.Right)
+                    {
+                        return true;
+                    }
+                    else if (current.ThumbSticks.Left.Y < -0.5f && dir == DirectionEnum.Down)
+                    {
+                        return true;
+                    }
+                    else if (current.ThumbSticks.Left.Y > 0.5f && dir == DirectionEnum.Up)
+                    {
+                        return true;
+                    }
+                    break;
+                case PS3StyleEnum.RightSide:
+                    if (current.ThumbSticks.Right.X < -0.5f && dir == DirectionEnum.Left)
+                    {
+                        return true;
+                    }
+                    else if (current.ThumbSticks.Right.X > 0.5f && dir == DirectionEnum.Right)
+                    {
+                        return true;
+                    }
+                    else if (current.ThumbSticks.Right.Y < -0.5f && dir == DirectionEnum.Down)
+                    {
+                        return true;
+                    }
+                    else if (current.ThumbSticks.Right.Y > 0.5f && dir == DirectionEnum.Up)
+                    {
+                        return true;
+                    }
+                    break;
             }
-            else if (current.ThumbSticks.Left.X > 0.5f && dir == DirectionEnum.Right)
-            {
-                return true;
-            }
-            else if (current.ThumbSticks.Left.Y < -0.5f && dir == DirectionEnum.Down)
-            {
-                return true;
-            }
-            else if (current.ThumbSticks.Left.Y > 0.5f && dir == DirectionEnum.Up)
-            {
-                return true;
-            }
+            
             return false;
         }
         private Buttons _leftStick;
@@ -126,6 +150,7 @@ namespace repulse
         private Buttons _upStick;
         private Buttons _downStick;
         private Buttons _trigger;
+        private PS3StyleEnum _style;
         private Dictionary<Buttons, bool> _buttonState = new Dictionary<Buttons, bool>();
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Microsoft.Xna.Framework;
 
 namespace repulse
 {
@@ -12,21 +11,38 @@ namespace repulse
         public bool newHighScore = false;
         private string[] _letter = new string[] {"_ ", "_ ", "_ ", "_ ", "_ ", "_ ", "_ ", "_ "};
         private int _letterPos = 0;
-        private string PlayerName;
+        public string PlayerName;
+        public double Score;
 
         public HighScore(EntityDrawData drawData)
         {
-
+            highScoreRead();
         }
 
-        public double highScoreRead()
+        public void highScoreRead()
         {
             string fileContents = File.ReadAllText("C:/Users/Yackob/Desktop/Coding/smartgit/Repulse/WindowsGame1/WindowsGame1Content/score.txt");
 
-            double score = Convert.ToDouble(fileContents);
-
-            return score;
+            string[] tokens = fileContents.Split(',');
+            PlayerName = tokens[0];
+            Score = Convert.ToDouble(tokens[1]);
+            
             //using (System.IO.StreamReader tr = new System.IO.StreamReader("score.txt"));
+            /*
+            string[] highScoresText = File.ReadAllLines("highscores.csv");
+
+            HighScore[] highScores = new HighScore[highScoresText.Length];
+
+            for (int index = 0; index < highScoresText.Length; index++)
+            {
+                string[] tokens = highScoresText[index].Split('h');
+
+                _PlayerName = tokens[0];
+                _score = Convert.ToInt32(tokens[1]);
+
+                highScores[index] = new HighScore(name, score);
+            }
+            */
         }
 
         public void highScoreWrite(double reaction)
@@ -35,25 +51,38 @@ namespace repulse
             //{
             //    tw.Write(reaction);
             //}
-
-            if (highScoreRead() < reaction)
+            highScoreRead();
+            if (Score < reaction)
             {
                 newHighScore = false;
             }
-            else if (highScoreRead() > reaction)
+            else if (Score > reaction)
             {
-                string newReactionTime = reaction + "\n";
+                string newReactionTime = CurrentHighScoreName() + ", " + reaction + "\n";
 
                 File.WriteAllText("C:/Users/Yackob/Desktop/Coding/smartgit/Repulse/WindowsGame1/WindowsGame1Content/score.txt", newReactionTime);
                 newHighScore = true;
+                highScoreRead();
             }
+            
+        }
 
+        public void HighScoreUpdate(double reaction)
+        {
+            highScoreRead();
+            if (Score < reaction)
+            {
+                newHighScore = false;
+            }
+            else if (Score >= reaction)
+            {
+                newHighScore = true;
+            }
         }
 
         public string CurrentHighScoreName()
         {
-            string currentName = _letter[0] + _letter[1] + _letter[2] + _letter[3] + _letter[4] + _letter[5] + _letter[6] + _letter[7] + " Good Job!! ";
-            PlayerName = currentName;
+            string currentName = _letter[0] + _letter[1] + _letter[2] + _letter[3] + _letter[4] + _letter[5] + _letter[6] + _letter[7];
             return currentName;
         }
         public void ShiftLetterPosition(string operation)
