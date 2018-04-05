@@ -141,8 +141,14 @@ namespace repulse
                 case "9 ":
                     _letter[_letterPos] = "8 ";
                     break;
-                case "_ ":
+                case "- ":
                     _letter[_letterPos] = "9 ";
+                    break;
+                case "  ":
+                    _letter[_letterPos] = "- ";
+                    break;
+                case "_ ":
+                    _letter[_letterPos] = "  ";
                     break;
                 case "A ":
                     _letter[_letterPos] = "_ ";
@@ -257,6 +263,12 @@ namespace repulse
                     _letter[_letterPos] = "9 ";
                     break;
                 case "9 ":
+                    _letter[_letterPos] = "- ";
+                    break;
+                case "- ":
+                    _letter[_letterPos] = "  ";
+                    break;
+                case "  ":
                     _letter[_letterPos] = "_ ";
                     break;
                 case "_ ":

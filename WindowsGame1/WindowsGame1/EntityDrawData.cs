@@ -10,15 +10,17 @@ namespace repulse
 {
     public class EntityDrawData
     {
-        /*
+        /*  
         TODO:
-
         music (meh)
-        story mode???????? 
-        make sure two ps3 controllers work (bring 2)
+        story mode???????? (meh)
         animations :( wamp wamp wampppp // asking matt/sam/colin to do some.
         
         ~~
+        fix reaction time bug
+        add delay for AI
+        fix arrow bug
+        make sure two ps3 controllers work
         add who got highscore
         add ps3 controller
         write high scores from AI mode
@@ -65,7 +67,6 @@ namespace repulse
         public bool attack = false;
         public bool newAttacker = true;
         public bool attackCast = false;
-        public bool pressedExtention= false;
         public string[] alive = new string[2];
         public string[] Dead = new string[2];
         public string[] deaddead = new string[2];
@@ -108,8 +109,10 @@ namespace repulse
         public Controller IJKLcontroller;
         public Controller Arrowcontroller;
         public Controller NumPadcontroller;
-        public Controller LeftSidecontroller;
-        public Controller RightSidecontroller;
+        public Controller LeftSide1controller;
+        public Controller RightSide1controller;
+        public Controller LeftSide2controller;
+        public Controller RightSide2controller;
         private SelectionBox chosen;
         private Background bg;
         private Gamemode twoPlayers;
@@ -163,8 +166,10 @@ namespace repulse
             LoadControllers(IJKLcontroller, ControllerEnum.IJKL);
             LoadControllers(Arrowcontroller, ControllerEnum.Arrow);
             LoadControllers(NumPadcontroller, ControllerEnum.NumPad);
-            LoadControllers(LeftSidecontroller, ControllerEnum.LeftSide);
-            LoadControllers(RightSidecontroller, ControllerEnum.RightSide);
+            LoadControllers(LeftSide1controller, ControllerEnum.LeftSide1);
+            LoadControllers(RightSide1controller, ControllerEnum.RightSide1);
+            LoadControllers(LeftSide2controller, ControllerEnum.LeftSide2);
+            LoadControllers(RightSide2controller, ControllerEnum.RightSide2);
 
             foreach (ControllerEnum Enum in Enum.GetValues(typeof(ControllerEnum)))
                 if (Enum != ControllerEnum.Blank)
@@ -192,138 +197,140 @@ namespace repulse
             {
                 keyboardEnter = 0;
             }
-            if(choiceTimer >= choiceTimerLimit)
-            if (_controllers.IndexOf(controller) == Player1Controller || _controllers.IndexOf(controller) == Player2Controller || keyboardEnter == _controllers.IndexOf(controller))
+            if (choiceTimer >= choiceTimerLimit)
             {
-                choiceTimer = 0;
+                if (_controllers.IndexOf(controller) == Player1Controller || _controllers.IndexOf(controller) == Player2Controller || keyboardEnter == _controllers.IndexOf(controller))
+                {
+                    choiceTimer = 0;
 
-                Console.WriteLine(Player1Controller + " " + Player2Controller + " " + _controllers.IndexOf(controller) + " " + _currentController + " " + keyboardEnter);
-                if (Stage == StageEnum.GamemodeSelect )
-                {
-                    playerGamemodeChoice();
-                    stageChange();
-                    
-                }
-                else if (Stage == StageEnum.ControllerTypeSelect && Player1Controller != -1 && Player2Controller != -1)
-                {
-                    //Console.WriteLine(_controllers.IndexOf(controller) + " xd " + Player1Controller + " <-p1p2-> " + Player2Controller);
-                    
-                    stageChange();
-                    _currentController = Player1Controller;
-                    UpdateControllerIcons();
-                    
-                }
-                else if (Stage == StageEnum.PlayerInformationScreen)
-                {
-                    stageChange();
-
-                }
-                else if (Stage == StageEnum.BackgroundSelect)
-                {
-                    playerBackgroundChoice();
-                    stageChange();
-                }
-                else if (Stage == StageEnum.CharacterSelect)
-                {
-                    if (gameMode == 1)
+                    Console.WriteLine(Player1Controller + " " + Player2Controller + " " + _controllers.IndexOf(controller) + " " + _currentController + " " + keyboardEnter);
+                    if (Stage == StageEnum.GamemodeSelect)
                     {
-                        if (_controllers.IndexOf(controller) == _currentController || _controllers.IndexOf(controller) == 0 && _currentController <= 3)
+                        playerGamemodeChoice();
+                        stageChange();
+
+                    }
+                    else if (Stage == StageEnum.ControllerTypeSelect && Player1Controller != -1 && Player2Controller != -1)
+                    {
+                        //Console.WriteLine(_controllers.IndexOf(controller) + " xd " + Player1Controller + " <-p1p2-> " + Player2Controller);
+
+                        stageChange();
+                        _currentController = Player1Controller;
+                        UpdateControllerIcons();
+
+                    }
+                    else if (Stage == StageEnum.PlayerInformationScreen)
+                    {
+                        stageChange();
+
+                    }
+                    else if (Stage == StageEnum.BackgroundSelect)
+                    {
+                        playerBackgroundChoice();
+                        stageChange();
+                    }
+                    else if (Stage == StageEnum.CharacterSelect)
+                    {
+                        if (gameMode == 1)
                         {
-                            if (_currentController == Player1Controller)
+                            if (_controllers.IndexOf(controller) == _currentController || _controllers.IndexOf(controller) == 0 && _currentController <= 3)
+                            {
+                                if (_currentController == Player1Controller)
+                                {
+                                    Controller_Character(characterChoice, true, 0);
+                                    Change_currentController();
+                                    p1Character = characterChoice;
+                                    choiceTimer = 0;
+
+                                }
+                                else if (_currentController == Player2Controller)
+                                {
+                                    Controller_Character(characterChoice, true, 1);
+                                    p2Character = characterChoice;
+
+                                    if (initCompleted == false) stage2Declair();
+                                    else {
+                                        if (_currentController == Player2Controller)
+                                        {
+                                            _p1.attacker = false;
+                                            _p2.attacker = true;
+                                        }
+                                        else
+                                        {
+                                            _p1.attacker = true;
+                                            _p2.attacker = false;
+                                        }
+                                        _p1.CharacterChanging(p1Character);
+                                        _p2.CharacterChanging(p2Character);
+                                        foreach (DirectionEnum Enum in Enum.GetValues(typeof(DirectionEnum)))
+                                            if (Enum != DirectionEnum.Blank)
+                                            {
+                                                _weapons1[Enum].characterChanging(p1Character, Enum);
+                                                _weapons2[Enum].characterChanging(p2Character, Enum);
+                                            }
+
+                                    }
+
+                                    stageChange();
+                                    pauseDelay = 0;
+                                }
+
+                            }
+
+                            else if (_controllers.IndexOf(controller) != _currentController)
+                            {
+
+                            }
+                        }
+                        else if (gameMode == 2)
+                        {
+                            if (_currentController == Player1Controller && _p1chosen == false)
                             {
                                 Controller_Character(characterChoice, true, 0);
                                 Change_currentController();
+                                _p1chosen = true;
                                 p1Character = characterChoice;
-                                choiceTimer = 0;
-
                             }
-                            else if (_currentController == Player2Controller)
+                            else if (_p1chosen == true)
                             {
                                 Controller_Character(characterChoice, true, 1);
                                 p2Character = characterChoice;
 
                                 if (initCompleted == false) stage2Declair();
                                 else {
-                                    if (_currentController == Player2Controller)
-                                    {
-                                        _p1.attacker = false;
-                                        _p2.attacker = true;
-                                    }
-                                    else
-                                    {
-                                        _p1.attacker = true;
-                                        _p2.attacker = false;
-                                    }
                                     _p1.CharacterChanging(p1Character);
                                     _p2.CharacterChanging(p2Character);
+
                                     foreach (DirectionEnum Enum in Enum.GetValues(typeof(DirectionEnum)))
                                         if (Enum != DirectionEnum.Blank)
-                                        {
-                                            _weapons1[Enum].characterChanging(p1Character, Enum);
                                             _weapons2[Enum].characterChanging(p2Character, Enum);
-                                        }
-                                        
                                 }
 
                                 stageChange();
                                 pauseDelay = 0;
                             }
 
-                        }
-
-                        else if (_controllers.IndexOf(controller) != _currentController)
-                        {
 
                         }
+
                     }
-                    else if (gameMode == 2)
+                    else if (Stage == StageEnum.MainGameplay)
                     {
-                        if (_currentController == Player1Controller && _p1chosen == false)
+
+                    }
+                    else if (Stage == StageEnum.EndScreen)
+                    {
+                        if (gameMode == 1)
                         {
-                            Controller_Character(characterChoice, true, 0);
-                            Change_currentController();
-                            _p1chosen = true;
-                            p1Character = characterChoice;
+                            resetGame();
                         }
-                        else if (_p1chosen == true)
+                        else if (gameMode == 2)
                         {
-                            Controller_Character(characterChoice, true, 1);
-                            p2Character = characterChoice;
-
-                            if (initCompleted == false) stage2Declair();
-                            else {
-                                _p1.CharacterChanging(p1Character);
-                                _p2.CharacterChanging(p2Character);
-
-                                foreach (DirectionEnum Enum in Enum.GetValues(typeof(DirectionEnum)))
-                                    if (Enum != DirectionEnum.Blank)
-                                        _weapons2[Enum].characterChanging(p2Character, Enum);
-                            }
-
-                            stageChange();
-                            pauseDelay = 0;
+                            _hs.highScoreWrite(reactionTime);
+                            resetGame();
                         }
 
-
                     }
-
-                }
-                else if (Stage == StageEnum.MainGameplay)
-                {
-
-                }
-                else if (Stage == StageEnum.EndScreen)
-                {
-                    if (gameMode == 1)
-                    {
-                        resetGame();
-                    }
-                    else if (gameMode == 2)
-                    {
-                        _hs.highScoreWrite(reactionTime);
-                        resetGame();
-                    }
-                    
                 }
             }
             
@@ -435,9 +442,7 @@ namespace repulse
                         {
 
                             // attacker
-                            if (pressed) pressedExtention = true;
-
-                            _arrows[dir].Toggle(pressedExtention);
+                            _arrows[dir].Toggle(true);
                             attackDirection = dir;
                             attack = true;
                         }
@@ -566,11 +571,17 @@ namespace repulse
                 case ControllerEnum.NumPad:
                     controller = new KeyboardController(KeyboardController.KeyboardStyleEnum.NumPad);
                     break;
-                case ControllerEnum.LeftSide:
-                    controller = new PS3Controller(PS3Controller.PS3StyleEnum.LeftSide);
+                case ControllerEnum.LeftSide1:
+                    controller = new PS3Controller(PlayerIndex.One, PS3Controller.PS3StyleEnum.LeftSide);
                     break;
-                case ControllerEnum.RightSide:
-                    controller = new PS3Controller(PS3Controller.PS3StyleEnum.RightSide);
+                case ControllerEnum.RightSide1:
+                    controller = new PS3Controller(PlayerIndex.One, PS3Controller.PS3StyleEnum.RightSide);
+                    break;
+                case ControllerEnum.LeftSide2:
+                    controller = new PS3Controller(PlayerIndex.Two, PS3Controller.PS3StyleEnum.LeftSide);
+                    break;
+                case ControllerEnum.RightSide2:
+                    controller = new PS3Controller(PlayerIndex.Two, PS3Controller.PS3StyleEnum.RightSide);
                     break;
             }
             _controllers.Add(controller);
@@ -596,10 +607,16 @@ namespace repulse
                 case ControllerEnum.NumPad:
                     texture = "numpad";
                     break;
-                case ControllerEnum.LeftSide:
+                case ControllerEnum.LeftSide1:
                     texture = "leftside";
                     break;
-                case ControllerEnum.RightSide:
+                case ControllerEnum.RightSide1:
+                    texture = "rightside";
+                    break;
+                case ControllerEnum.LeftSide2:
+                    texture = "leftside";
+                    break;
+                case ControllerEnum.RightSide2:
                     texture = "rightside";
                     break;
 
@@ -999,7 +1016,7 @@ namespace repulse
 
 
 
-
+            newAttacker = true;
             attackDirection = DirectionEnum.Blank;
             blockDirection = DirectionEnum.Blank;
             timer = 0;
@@ -1029,7 +1046,7 @@ namespace repulse
             //changes whos attacking
 
             Change_currentController();
-            newAttacker = true;
+            
             ChangedAttackerRan++;
             
             
@@ -1073,13 +1090,12 @@ namespace repulse
             //logic for the attacking
             
             attackTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-            reactionTime += gameTime.ElapsedGameTime.TotalMilliseconds;
 
 
             if (gameMode == 1)
             {
                 attackCast = true;
-                if (attackTimer >= attackTimerLimit)
+                if (attackTimer >= attackTimerLimit && newAttacker == false)
                 {
 
 
@@ -1091,7 +1107,6 @@ namespace repulse
 
 
                     attack = false;
-                    pressedExtention = false;
                     attackTimer = 0;
                     attackCast = false;
                     attackTimerLimit = Convert.ToInt32(attackTimerLimit / 1.1) - 1;
@@ -1138,10 +1153,16 @@ namespace repulse
             }
             else if (gameMode == 2)
             {
-                if(_chosenAttack == false) ChooseAttackDirection();
-                
+                if (_chosenAttack == false && newAttacker == false)
+                {
+                    ChooseAttackDirection();
+                }
+                else if (_chosenAttack == false)
+                {
+                    attackDirection = DirectionEnum.Blank;
+                }
 
-                if (attackTimer >= attackTimerLimit)
+                if (attackTimer >= attackTimerLimit && newAttacker == false)
                 {
                     foreach (var arrow in _arrows)
                     {
@@ -1150,9 +1171,9 @@ namespace repulse
 
 
                     attack = false;
-                    pressedExtention = false;
                     attackTimer = 0;
                     attackCast = false;
+                    reactionTime = attackTimerLimit;
                     attackTimerLimit = Convert.ToInt32(attackTimerLimit / 1.1) - 1;
                     if (attackTimerLimit <= 1)
                     {
@@ -1234,10 +1255,9 @@ namespace repulse
                     attackDirection = DirectionEnum.Right;
                     break;
             }
-
+            _arrows[attackDirection].Toggle(true);
             _chosenAttack = true;
-
-            reactionTime = 0;
+            attackTimer = 0;
         }
 
         public void resetGame()
@@ -1245,12 +1265,14 @@ namespace repulse
             //resets the game after finishing
             stageChange();
             _victor = 0;
-            choiceTimer = 0;
             _p1.health = 2;
             _p2.health = 2;
             attackTimerLimit = 1400;
             _currentController = Player1Controller;
             _hs.newHighScore = false;
+            attackDirection = DirectionEnum.Blank;
+            BlockAnimation = false;
+            DamageAnimation = false;
             
         }
 
@@ -1306,10 +1328,13 @@ namespace repulse
                     Stage = StageEnum.BackgroundSelect;
                     break;
             }
-            
+
+            choiceTimer = 0;
+            moveChoiceTimer = 0;
             //hi
             //hey whatcha doing
             //refactoring code ?(
+            //quitting this shitty as game
         }
 
         public void playerGamemodeChoice()
@@ -1427,10 +1452,16 @@ namespace repulse
                     _controllerIcons[ControllerEnum.NumPad].player = 1;
                     break;
                 case 4:
-                    _controllerIcons[ControllerEnum.LeftSide].player = 1;
+                    _controllerIcons[ControllerEnum.LeftSide1].player = 1;
                     break;
                 case 5:
-                    _controllerIcons[ControllerEnum.RightSide].player = 1;
+                    _controllerIcons[ControllerEnum.RightSide1].player = 1;
+                    break;
+                case 6:
+                    _controllerIcons[ControllerEnum.LeftSide2].player = 1;
+                    break;
+                case 7:
+                    _controllerIcons[ControllerEnum.RightSide2].player = 1;
                     break;
             }
             switch (Player2Controller)
@@ -1448,10 +1479,16 @@ namespace repulse
                     _controllerIcons[ControllerEnum.NumPad].player = 2;
                     break;
                 case 4:
-                    _controllerIcons[ControllerEnum.LeftSide].player = 2;
+                    _controllerIcons[ControllerEnum.LeftSide1].player = 2;
                     break;
                 case 5:
-                    _controllerIcons[ControllerEnum.RightSide].player = 2;
+                    _controllerIcons[ControllerEnum.RightSide1].player = 2;
+                    break;
+                case 6:
+                    _controllerIcons[ControllerEnum.LeftSide2].player = 2;
+                    break;
+                case 7:
+                    _controllerIcons[ControllerEnum.RightSide2].player = 2;
                     break;
             }
             foreach (ControllerEnum Enum in Enum.GetValues(typeof(ControllerEnum)))
@@ -1476,23 +1513,18 @@ namespace repulse
             elapsedTime += gameTime.ElapsedGameTime.TotalMilliseconds;
             if (pause == -1)
             {
+
+                moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                 if (Stage == StageEnum.GamemodeSelect)
                 {
-                    choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-                    moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                 }
                 else if (Stage == StageEnum.ControllerTypeSelect)
                 {
-                    choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-                    moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-
-
 
                 }
                 else if (Stage == StageEnum.PlayerInformationScreen)
                 {
-                    choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-                    informationTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                     if (informationTimer >= informationTimerLimit)
                     {
                         informationTimer = 0;
@@ -1504,18 +1536,14 @@ namespace repulse
                     
                     if (Stage == StageEnum.BackgroundSelect)
                     {
-                        choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-                        moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+                        
                     }
                     else if (Stage == StageEnum.CharacterSelect)
                     {
-                        choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-                        moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                         playersCharacterChoice();
                     }
                     else if (Stage == StageEnum.MainGameplay)
                     {
-
                         // CharacterChoice.Update(gameTime);
                         timer += gameTime.ElapsedGameTime.TotalMilliseconds;
                         newAttackerDelay(gameTime);
@@ -1559,18 +1587,14 @@ namespace repulse
 
                     if (Stage == StageEnum.BackgroundSelect)
                     {
-                        choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-                        moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+
                     }
                     else if (Stage == StageEnum.CharacterSelect)
                     {
-                        choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-                        moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                         playersCharacterChoice();
                     }
                     else if (Stage == StageEnum.MainGameplay)
                     {
-
                         // CharacterChoice.Update(gameTime);
                         timer += gameTime.ElapsedGameTime.TotalMilliseconds;
                         newAttackerDelay(gameTime);
@@ -1587,8 +1611,6 @@ namespace repulse
                     }
                     else if (Stage == StageEnum.EndScreen)
                     {
-                        choiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-                        moveChoiceTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
                         timer += gameTime.ElapsedGameTime.TotalMilliseconds;
                     }
                 }
@@ -1992,8 +2014,8 @@ Please Enter your Name!
         }
         public void DrawStrings(GameTime gameTime, SpriteBatch spriteBatch, SpriteFont font, string text, Vector2 pos, Color colour, float rotation, Vector2 origin, float scale, SpriteEffects effect, float layer)
         {
-            spriteBatch.DrawString(font, String.Format(text), TextShadowPosition(pos, scale), Color.Black, rotation, origin, scale, effect, layer);
-            spriteBatch.DrawString(font, String.Format(text), pos, colour, rotation, origin, scale, effect, layer);
+            spriteBatch.DrawString(font, text, TextShadowPosition(pos, scale), Color.Black, rotation, origin, scale, effect, layer);
+            spriteBatch.DrawString(font, text, pos, colour, rotation, origin, scale, effect, layer);
 
         }
     }

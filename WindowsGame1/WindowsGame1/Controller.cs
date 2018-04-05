@@ -12,8 +12,10 @@ namespace repulse
         IJKL,
         Arrow,
         NumPad,
-        LeftSide,
-        RightSide,
+        LeftSide1,
+        RightSide1,
+        LeftSide2,
+        RightSide2,
         Blank
     }
 

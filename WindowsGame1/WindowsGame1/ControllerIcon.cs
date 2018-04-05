@@ -65,10 +65,16 @@ namespace repulse
                 case ControllerEnum.NumPad:
                     _scale = 0.5f;
                     break;
-                case ControllerEnum.LeftSide:
+                case ControllerEnum.LeftSide1:
                     _scale = 1.5f;
                     break;
-                case ControllerEnum.RightSide:
+                case ControllerEnum.RightSide1:
+                    _scale = 1.5f;
+                    break;
+                case ControllerEnum.LeftSide2:
+                    _scale = 1.5f;
+                    break;
+                case ControllerEnum.RightSide2:
                     _scale = 1.5f;
                     break;
             }

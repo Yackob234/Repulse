@@ -15,9 +15,11 @@ namespace repulse
             RightSide
         }
 
-        public PS3Controller(PS3StyleEnum style)
+        public PS3Controller(PlayerIndex player, PS3StyleEnum style)
         {
+
             _style = style;
+            _player = player;
             switch (_style)
             {
                 case PS3StyleEnum.LeftSide:
@@ -45,13 +47,24 @@ namespace repulse
 
         public override void Update(GameTime gameTime)
         {
-            
-            GamePadState newState = GamePad.GetState(PlayerIndex.One);
+            GamePadCapabilities capabilities1 = GamePad.GetCapabilities(_player);
+
+            if (capabilities1.IsConnected)
+            {
+                GamePadState newState1 = GamePad.GetState(_player);
+                Console.WriteLine(newState1.PacketNumber);
+                SetState(newState1, _upStick, DirectionEnum.Up);
+                SetState(newState1, _downStick, DirectionEnum.Down);
+                SetState(newState1, _leftStick, DirectionEnum.Left);
+                SetState(newState1, _rightStick, DirectionEnum.Right);
+                SetActionState(newState1, _trigger, ActionEnum.Button1);
+            }
+
+            //if(GamePad.GetState(PlayerIndex.One))
             /*
             // Check the device for Player One
-            GamePadCapabilities capabilities = GamePad.GetCapabilities(
-                                               PlayerIndex.One);
-
+            GamePadCapabilities capabilities1 = GamePad.GetCapabilities(PlayerIndex.One);
+            
             // If there a controller attached, handle it
             if (capabilities.IsConnected)
             {
@@ -66,12 +79,6 @@ namespace repulse
                     }
             }
             */
-            
-            SetState(newState, _upStick, DirectionEnum.Up);
-            SetState(newState, _downStick, DirectionEnum.Down);   
-            SetState(newState, _leftStick, DirectionEnum.Left);
-            SetState(newState, _rightStick, DirectionEnum.Right);
-            SetActionState(newState, _trigger, ActionEnum.Button1);
 
             base.Update(gameTime);
         }
@@ -151,6 +158,7 @@ namespace repulse
         private Buttons _downStick;
         private Buttons _trigger;
         private PS3StyleEnum _style;
+        private PlayerIndex _player;
         private Dictionary<Buttons, bool> _buttonState = new Dictionary<Buttons, bool>();
     }
 }
