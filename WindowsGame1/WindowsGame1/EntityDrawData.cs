@@ -134,7 +134,7 @@ namespace repulse
         SortedList<string, Texture2D> textures;
 
         private int _currentController = -1;
-        private bool _lastStand = false;
+        public bool _lastStand = false;
         private bool _initLastStand = false;
         private bool _chosenAttack = false;
         private bool _p1chosen = false;
@@ -949,11 +949,12 @@ namespace repulse
                 {
                     if (_p1.attacker)
                     {
+                        _p2.shakeFast();
                         _p2.health--;
                     }
                     else if (_p2.attacker)
                     {
-
+                        _p1.shakeFast();
                         _p1.health--;
                     }
 
@@ -979,10 +980,12 @@ namespace repulse
                     {
                         if (_p1.attacker)
                         {
+                            _p1.shakeFast();
                             _p1.health--;
                         }
                         else if (_p2.attacker)
                         {
+                            _p2.shakeFast();
                             _p2.health--;
                         }
                         _lastStand = false;
@@ -998,6 +1001,7 @@ namespace repulse
             {
                 if (attackDirection != blockDirection && attackDirection != DirectionEnum.Blank)
                 {
+                    _p1.shakeFast();
                     _p1.health--;
                     DamageAnimation = true;
                 }
@@ -1009,6 +1013,7 @@ namespace repulse
                 {
                     _hs.HighScoreUpdate(reactionTime);
                     _victor = 1;
+                    _p1.shakeFast();
                     _p1.health--;
 
                 }
@@ -1054,10 +1059,12 @@ namespace repulse
             {
                 if (_p1.attacker)
                 {
+                    _p1.shakeFast();
                     _p1.health--;
                 }
                 else if (_p2.attacker)
                 {
+                    _p2.shakeFast();
                     _p2.health--;
                 }
                 _lastStand = false;
@@ -1254,6 +1261,9 @@ namespace repulse
                 case 4:
                     attackDirection = DirectionEnum.Right;
                     break;
+                case 5:
+                    //resetGame();
+                    break;
             }
             _arrows[attackDirection].Toggle(true);
             _chosenAttack = true;
@@ -1273,6 +1283,8 @@ namespace repulse
             attackDirection = DirectionEnum.Blank;
             BlockAnimation = false;
             DamageAnimation = false;
+            _p1.slow = 0f;
+            _p2.slow = 0f;
             
         }
 
@@ -1281,8 +1293,8 @@ namespace repulse
         public void stage2Declair()
         {
             //declairs the main game after the character choosing has finished
-            _p1 = new Player(this, alive[0], Dead[0], deaddead[0], 2, false, p1Character);
-            _p2 = new Player(this, alive[1], Dead[1], deaddead[1], 2, true, p2Character);
+            _p1 = new Player(this, alive[0], Dead[0], deaddead[0], 2, false, p1Character, 1);
+            _p2 = new Player(this, alive[1], Dead[1], deaddead[1], 2, true, p2Character, 2);
 
             _entities.Add(_p1);
             _entities.Add(_p2);

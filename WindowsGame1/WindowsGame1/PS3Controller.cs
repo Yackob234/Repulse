@@ -52,7 +52,6 @@ namespace repulse
             if (capabilities1.IsConnected)
             {
                 GamePadState newState1 = GamePad.GetState(_player);
-                Console.WriteLine(newState1.PacketNumber);
                 SetState(newState1, _upStick, DirectionEnum.Up);
                 SetState(newState1, _downStick, DirectionEnum.Down);
                 SetState(newState1, _leftStick, DirectionEnum.Left);

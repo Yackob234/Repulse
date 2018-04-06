@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace repulse
 {
     public class Player : Entity
     {
+        public float slow = 0f;
+        public float fast = 0f;
+        public double timer = 0;
+        public double timerLimit = 350;
         public int health;
         public bool attacker;
         private string _assetName;
@@ -17,8 +22,12 @@ namespace repulse
         private Vector2 _adjustedPosition;
         public CharacterEnum _character;
         private bool _characterChanged = false;
+        private int _num;
+        private PlayerIndex playerNum;
+        private bool _damage = false;
+        private bool _newVib = true;
         
-        public Player(EntityDrawData drawData, string assetName, string assetNameHurt, string assetNameDead, int Health, bool Attacker, CharacterEnum cha)
+        public Player(EntityDrawData drawData, string assetName, string assetNameHurt, string assetNameDead, int Health, bool Attacker, CharacterEnum cha, int num)
             : base(drawData, assetName)
         {
             health = Health;
@@ -27,13 +36,28 @@ namespace repulse
             _assetNameHurt = assetNameHurt;
             _assetNameDead = assetNameDead;
             _character = cha;
+            _num = num;
             _normalPosition = Position();
             _position = Position();
+            if(_num == 1)
+            {
+                playerNum = PlayerIndex.One;
+            } else if (_num == 2)
+            {
+                playerNum = PlayerIndex.Two;
+            }
         }
 
         public override void Update(GameTime gameTime)
         {
+            if(_damage == true)
+            {
+                timer += gameTime.ElapsedGameTime.TotalMilliseconds;
+            }
+            
             checkHealth();
+            shakeSlow();
+            shake();
             _position = _adjustedPosition;
             base.Update(gameTime);
         }
@@ -48,9 +72,60 @@ namespace repulse
            
             return pos;
         }
+        public void shake()
+        {
+            if (timer > timerLimit)
+            {
+                _newVib = true;
+                fast = 0.0f;
+                timer = 0;
+                _damage = false;
+            }
+            if (_newVib)
+            {
+                if (_num == 1)
+                {
+                    if (_drawData.Player1Controller == 4 || _drawData.Player1Controller == 5)
+                    {
+                        Console.WriteLine(fast);
+                        GamePad.SetVibration(PlayerIndex.One, slow, fast);
+                    }
+                    if (_drawData.Player1Controller == 6 || _drawData.Player1Controller == 7)
+                        GamePad.SetVibration(PlayerIndex.Two, slow, fast);
+                }
+                if (_num == 2)
+                {
+                    if (_drawData.Player2Controller == 4 || _drawData.Player2Controller == 5)
+                        GamePad.SetVibration(PlayerIndex.One, slow, fast);
+                    if (_drawData.Player2Controller == 6 || _drawData.Player2Controller == 7)
+                        GamePad.SetVibration(PlayerIndex.Two, slow, fast);
+                }
+                _newVib = false;
+            }
+        }
+        public void shakeSlow()
+        {
+            if (_drawData._lastStand && slow != 0.3f)
+            {
+                _newVib = true;
+                slow = 0.3f;
 
-       public void CharacterChanging(CharacterEnum cha)
-       {
+                _damage = true;
+                fast = 0.5f;
+            } else if (_drawData._lastStand == false && slow != 0.0f)
+            {
+                _newVib = true;
+                slow = 0.0f;
+            }
+        }
+        public void shakeFast()
+        {
+            _newVib = true;
+            _damage = true;
+            fast = 0.5f;
+        }
+        public void CharacterChanging(CharacterEnum cha)
+        {
             //choosing stuff
             switch (cha)
             {
@@ -95,8 +170,8 @@ namespace repulse
             Console.WriteLine(_assetName);
         }
 
-       public void checkHealth()
-       {
+        public void checkHealth()
+        {
             //changes health
             if (_drawData.Stage == StageEnum.MainGameplay)
             {
